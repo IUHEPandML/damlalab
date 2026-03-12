@@ -34,10 +34,6 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-et%08#epwqw6(u#!w(5
 # DEBUG should be turned off in production. Toggle with DJANGO_DEBUG env var.
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-# ALLOWED_HOSTS can be set via comma-separated DJANGO_ALLOWED_HOSTS env var.
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
-
-
 # Application definition
 
 INSTALLED_APPS = [
