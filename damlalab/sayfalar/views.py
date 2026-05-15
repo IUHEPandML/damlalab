@@ -7,6 +7,8 @@ from .models import (
     Project,
     Person,
     Position,
+    Topic,
+    Conference,
 )
 
 def home(request):
@@ -18,18 +20,17 @@ def home(request):
 def theses(request):
     ongoing = Thesis.objects.filter(
         is_published=True, status=Thesis.STATUS_ONGOING
-    ).order_by('-start_date').prefetch_related('thesisparticipation_set__person')
+    ).order_by('-start_date').prefetch_related('thesisparticipation_set__person', 'students', 'supervisors', 'principal_investigators')
 
     completed = Thesis.objects.filter(
         is_published=True, status=Thesis.STATUS_COMPLETE
-    ).order_by('-end_date').prefetch_related('thesisparticipation_set__person')
+    ).order_by('-end_date').prefetch_related('thesisparticipation_set__person', 'students', 'supervisors', 'principal_investigators')
 
     for qs in (ongoing, completed):
         for thesis in qs:
-            parts = thesis.thesisparticipation_set.all()
-            thesis.students = [p.person.name for p in parts if p.role == Person.ROLE_STUDENT]
-            thesis.supervisors = [p.person.name for p in parts if p.role == Person.ROLE_SUPERVISOR]
-            thesis.pis = [p.person.name for p in parts if p.role == Person.ROLE_PI]
+            thesis.students_list = [f"{s.first_name} {s.last_name}" for s in thesis.students.all()]
+            thesis.supervisors_list = [f"{p.first_name} {p.last_name}" for p in thesis.supervisors.all()]
+            thesis.pis_list = [f"{p.first_name} {p.last_name}" for p in thesis.principal_investigators.all()]
             if not thesis.slug:
                 thesis.slug = slugify(thesis.title)
 
@@ -40,10 +41,11 @@ def theses(request):
 
 def thesis_detail(request, slug):
     thesis = get_object_or_404(Thesis, slug=slug, is_published=True)
-    parts   = thesis.thesisparticipation_set.select_related('person').all()
-    students    = [p.person for p in parts if p.role == Person.ROLE_STUDENT]
-    supervisors = [p.person for p in parts if p.role == Person.ROLE_SUPERVISOR]
-    pis         = [p.person for p in parts if p.role == Person.ROLE_PI]
+    
+    # Get students, supervisors and PIs from new M2M fields
+    students = [f"{s.first_name} {s.last_name}" for s in thesis.students.all()]
+    supervisors = [f"{p.first_name} {p.last_name}" for p in thesis.supervisors.all()]
+    pis = [f"{p.first_name} {p.last_name}" for p in thesis.principal_investigators.all()]
 
     return render(request, 'thesis_detail.html', {
         'thesis': thesis,
@@ -54,26 +56,25 @@ def thesis_detail(request, slug):
 
 def projects(request):
     research_projects = Project.objects.filter(
-        project_type=Project.PROJECT_TYPE_RESEARCH,
         is_published=True
-    ).order_by('-start_date').prefetch_related('projectparticipation_set__person')
+    ).order_by('-start_date').prefetch_related('projectparticipation_set__person', 'students', 'supervisors', 'principal_investigators')
 
-    student_projects = Project.objects.filter(
-        project_type=Project.PROJECT_TYPE_STUDENT,
-        is_published=True
-    ).order_by('-start_date').prefetch_related('projectparticipation_set__person')
+    for project in research_projects:
+        project.students_list = [f"{s.first_name} {s.last_name}" for s in project.students.all()]
+        project.supervisors_list = [f"{p.first_name} {p.last_name}" for p in project.supervisors.all()]
+        project.pis_list = [f"{p.first_name} {p.last_name}" for p in project.principal_investigators.all()]
 
     return render(request, 'projects.html', {
         'research_projects': research_projects,
-        'student_projects': student_projects,
     })
 
 def project_detail(request, slug):
-    project = get_object_or_404(Project.objects.prefetch_related('projectparticipation_set__person'), slug=slug, is_published=True)
-    parts = project.projectparticipation_set.all()
-    students = [p.person for p in parts if p.role == Person.ROLE_STUDENT]
-    supervisors = [p.person for p in parts if p.role == Person.ROLE_SUPERVISOR]
-    pis = [p.person for p in parts if p.role == Person.ROLE_PI]
+    project = get_object_or_404(Project, slug=slug, is_published=True)
+    
+    # Get students, supervisors and PIs from new M2M fields
+    students = [f"{s.first_name} {s.last_name}" for s in project.students.all()]
+    supervisors = [f"{p.first_name} {p.last_name}" for p in project.supervisors.all()]
+    pis = [f"{p.first_name} {p.last_name}" for p in project.principal_investigators.all()]
 
     return render(request, 'projects_detail.html', {
         'project': project,
@@ -83,30 +84,66 @@ def project_detail(request, slug):
     })
     
 def members(request):
-    students = Person.objects.filter(
-        Q(thesisparticipation__role=Person.ROLE_STUDENT) | Q(projectparticipation__role=Person.ROLE_STUDENT)
-    ).distinct()
-
-    supervisors = Person.objects.filter(
-        Q(thesisparticipation__role=Person.ROLE_SUPERVISOR) | Q(projectparticipation__role=Person.ROLE_SUPERVISOR)
-    ).distinct()
-
-    pis = Person.objects.filter(
-        Q(thesisparticipation__role=Person.ROLE_PI) | Q(projectparticipation__role=Person.ROLE_PI)
-    ).distinct()
-
+    from .models import Professor, Student
+    
+    professors = Professor.objects.filter(is_active=True).order_by('last_name', 'first_name')
+    
+    current_grad_students = Student.objects.filter(
+        status=Student.STATUS_CURRENT,
+        student_type=Student.TYPE_GRADUATE
+    ).order_by('last_name', 'first_name')
+    
+    current_ug_students = Student.objects.filter(
+        status=Student.STATUS_CURRENT,
+        student_type=Student.TYPE_UNDERGRADUATE
+    ).order_by('last_name', 'first_name')
+    
+    previous_grad_students = Student.objects.filter(
+        status=Student.STATUS_PREVIOUS,
+        student_type=Student.TYPE_GRADUATE
+    ).order_by('last_name', 'first_name')
+    
+    previous_ug_students = Student.objects.filter(
+        status=Student.STATUS_PREVIOUS,
+        student_type=Student.TYPE_UNDERGRADUATE
+    ).order_by('last_name', 'first_name')
+    
     context = {
-        'students': list(students),
-        'supervisors': list(supervisors),
-        'pis': list(pis),
+        'professors': professors,
+        'current_grad_students': current_grad_students,
+        'current_ug_students': current_ug_students,
+        'previous_grad_students': previous_grad_students,
+        'previous_ug_students': previous_ug_students,
     }
     return render(request, 'members.html', context)
 
 def contact(request):
-    return render(request, 'contact.html')
+    from .models import Professor
+    professors = Professor.objects.filter(is_active=True).order_by('last_name', 'first_name')
+    return render(request, 'contact.html', {
+        'professors': professors,
+    })
 
 def positions(request):
     positions = Position.objects.filter(is_published=True).order_by('order')
     return render(request, 'positions.html', {
         'positions': positions,
+    })
+
+def topics(request):
+    topics = Topic.objects.filter(is_published=True).order_by('-start_date').prefetch_related('students', 'supervisors', 'principal_investigators')
+    
+    for topic in topics:
+        topic.students_list = [f"{s.first_name} {s.last_name}" for s in topic.students.all()]
+        topic.supervisors_list = [f"{p.first_name} {p.last_name}" for p in topic.supervisors.all()]
+        topic.pis_list = [f"{p.first_name} {p.last_name}" for p in topic.principal_investigators.all()]
+    
+    return render(request, 'topics.html', {
+        'topics': topics,
+    })
+
+def conferences(request):
+    conferences = Conference.objects.filter(is_published=True).order_by('-date')
+    return render(request, 'conferences.html', {
+        'conferences': conferences,
     })

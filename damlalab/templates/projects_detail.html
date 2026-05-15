@@ -43,8 +43,8 @@
           <h3 class="font-medium">Students</h3>
           <ul class="list-disc list-inside text-gray-700">
             {% if students %}
-              {% for p in students %}
-              <li>{{ p.name }}</li>
+              {% for name in students %}
+              <li>{{ name }}</li>
               {% endfor %}
             {% else %}
               <li>—</li>
@@ -55,8 +55,8 @@
           <h3 class="font-medium">Supervisors</h3>
           <ul class="list-disc list-inside text-gray-700">
             {% if supervisors %}
-              {% for p in supervisors %}
-              <li>{{ p.name }}</li>
+              {% for name in supervisors %}
+              <li>{{ name }}</li>
               {% endfor %}
             {% else %}
               <li>—</li>
@@ -67,8 +67,8 @@
           <h3 class="font-medium">Principal Investigator</h3>
           <ul class="list-disc list-inside text-gray-700">
             {% if pis %}
-              {% for p in pis %}
-              <li>{{ p.name }}</li>
+              {% for name in pis %}
+              <li>{{ name }}</li>
               {% endfor %}
             {% else %}
               <li>—</li>

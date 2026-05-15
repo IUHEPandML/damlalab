@@ -46,10 +46,17 @@
               {% if pos.commitment %}
               <p class="text-gray-700 mb-4"><strong>Commitment:</strong> {{ pos.commitment }}</p>
               {% endif %}
+              {% if pos.apply_link %}
+              <a href="{{ pos.apply_link }}" target="_blank" rel="noopener noreferrer"
+                 class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
+                Apply Now
+              </a>
+              {% else %}
               <a href="mailto:{{ pos.contact_email }}?subject={{ pos.title|urlencode }}"
                  class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
                 Apply Now
               </a>
+              {% endif %}
             </div>
           </article>
           {% endif %}
@@ -90,10 +97,17 @@
               {% if pos.commitment %}
               <p class="text-gray-700 mb-4"><strong>Commitment:</strong> {{ pos.commitment }}</p>
               {% endif %}
+              {% if pos.apply_link %}
+              <a href="{{ pos.apply_link }}" target="_blank" rel="noopener noreferrer"
+                 class="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition">
+                Apply Now
+              </a>
+              {% else %}
               <a href="mailto:{{ pos.contact_email }}?subject={{ pos.title|urlencode }}"
                  class="inline-block bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition">
                 Apply Now
               </a>
+              {% endif %}
             </div>
           </article>
           {% endif %}
@@ -134,10 +148,17 @@
               {% if pos.commitment %}
               <p class="text-gray-700 mb-4"><strong>Term:</strong> {{ pos.commitment }}</p>
               {% endif %}
+              {% if pos.apply_link %}
+              <a href="{{ pos.apply_link }}" target="_blank" rel="noopener noreferrer"
+                 class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
+                Apply Now
+              </a>
+              {% else %}
               <a href="mailto:{{ pos.contact_email }}?subject={{ pos.title|urlencode }}"
                  class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
                 Apply Now
               </a>
+              {% endif %}
             </div>
           </article>
           {% endif %}

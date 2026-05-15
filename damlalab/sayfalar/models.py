@@ -74,6 +74,22 @@ class Thesis(models.Model):
         through='ThesisParticipation',
         related_name='theses'
     )
+    
+    students    = models.ManyToManyField(
+        'Student',
+        blank=True,
+        related_name='theses'
+    )
+    supervisors = models.ManyToManyField(
+        'Professor',
+        blank=True,
+        related_name='supervised_theses'
+    )
+    principal_investigators = models.ManyToManyField(
+        'Professor',
+        blank=True,
+        related_name='pi_theses'
+    )
 
     class Meta:
         ordering = ['-start_date']
@@ -109,20 +125,8 @@ class ThesisParticipation(models.Model):
         return f"{self.person.name} as {role_display} in {self.thesis.title}"
 
 class Project(models.Model):
-    PROJECT_TYPE_RESEARCH = 'research'
-    PROJECT_TYPE_STUDENT  = 'student'
-    PROJECT_TYPE_CHOICES  = [
-        (PROJECT_TYPE_RESEARCH, 'Research Project'),
-        (PROJECT_TYPE_STUDENT,  'Student Project'),
-    ]
-
     title        = models.CharField(max_length=200)
     slug         = models.SlugField(max_length=220, unique=True, blank=True)
-    project_type = models.CharField(
-        max_length=10,
-        choices=PROJECT_TYPE_CHOICES,
-        default=PROJECT_TYPE_RESEARCH
-    )
     start_date   = models.DateField()
     end_date     = models.DateField(null=True, blank=True)
     description  = models.TextField(blank=True)
@@ -138,6 +142,22 @@ class Project(models.Model):
         Person,
         through='ProjectParticipation',
         related_name='projects'
+    )
+    
+    students    = models.ManyToManyField(
+        'Student',
+        blank=True,
+        related_name='projects'
+    )
+    supervisors = models.ManyToManyField(
+        'Professor',
+        blank=True,
+        related_name='supervised_projects'
+    )
+    principal_investigators = models.ManyToManyField(
+        'Professor',
+        blank=True,
+        related_name='pi_projects'
     )
 
     class Meta:
@@ -199,6 +219,7 @@ class Position(models.Model):
                           help_text="E.g. '10–15 hrs/week' or '2–3 years'"
                       )
     contact_email   = models.EmailField(help_text="Email to apply")
+    apply_link      = models.URLField(blank=True, null=True, help_text="Link to application form or page")
     is_published    = models.BooleanField(default=True)
     order           = models.PositiveIntegerField(default=0, help_text="Lower numbers appear first")
 
@@ -218,3 +239,144 @@ class Position(models.Model):
 
     def __str__(self):
         return f"{self.get_position_type_display()}: {self.title}"
+
+
+class Professor(models.Model):
+    title       = models.CharField(max_length=100, help_text="e.g., Prof., Dr., Assoc. Prof.")
+    first_name  = models.CharField(max_length=100)
+    last_name   = models.CharField(max_length=100)
+    email       = models.EmailField(blank=True)
+    biography   = models.TextField(blank=True, help_text="Short biography")
+    avesis_link = models.URLField(blank=True, null=True, help_text="Link to Avesis profile")
+    image       = models.ImageField(
+        upload_to='professors/',
+        null=True,
+        blank=True
+    )
+    is_active   = models.BooleanField(default=True)
+    created_at  = models.DateTimeField(auto_now_add=True)
+    updated_at  = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['last_name', 'first_name']
+
+    def __str__(self):
+        return f"{self.title} {self.first_name} {self.last_name}"
+
+
+class Student(models.Model):
+    TYPE_UNDERGRADUATE = 'UG'
+    TYPE_GRADUATE      = 'GR'
+    TYPE_CHOICES       = [
+        (TYPE_UNDERGRADUATE, 'Undergraduate'),
+        (TYPE_GRADUATE,      'Graduate'),
+    ]
+
+    STATUS_CURRENT  = 'current'
+    STATUS_PREVIOUS = 'previous'
+    STATUS_CHOICES  = [
+        (STATUS_CURRENT,  'Current'),
+        (STATUS_PREVIOUS, 'Previous'),
+    ]
+
+    first_name  = models.CharField(max_length=100)
+    last_name   = models.CharField(max_length=100)
+    email       = models.EmailField(blank=True)
+    student_type = models.CharField(
+        max_length=2,
+        choices=TYPE_CHOICES,
+        default=TYPE_GRADUATE
+    )
+    status      = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=STATUS_CURRENT
+    )
+    advisor     = models.ForeignKey(
+        Professor,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='students'
+    )
+    created_at  = models.DateTimeField(auto_now_add=True)
+    updated_at  = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['last_name', 'first_name']
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class Topic(models.Model):
+    title        = models.CharField(max_length=200)
+    slug         = models.SlugField(max_length=220, unique=True, blank=True)
+    start_date   = models.DateField()
+    end_date     = models.DateField(null=True, blank=True)
+    description  = models.TextField()
+    image        = models.ImageField(
+        upload_to='topics/',
+        null=True,
+        blank=True
+    )
+    link         = models.URLField(blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
+    
+    # M2M relationships for participants
+    students     = models.ManyToManyField(
+        Student,
+        blank=True,
+        related_name='topics'
+    )
+    supervisors  = models.ManyToManyField(
+        Professor,
+        blank=True,
+        related_name='supervised_topics'
+    )
+    principal_investigators = models.ManyToManyField(
+        Professor,
+        blank=True,
+        related_name='pi_topics'
+    )
+
+    class Meta:
+        ordering = ['-created_at', 'title']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title)[:200]
+            slug = base
+            cnt = 1
+            while Topic.objects.filter(slug=slug).exists():
+                slug = f"{base}-{cnt}"
+                cnt += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class Conference(models.Model):
+    name        = models.CharField(max_length=200)
+    date        = models.DateField()
+    location    = models.CharField(max_length=300, help_text="Conference location/city")
+    link        = models.URLField(blank=True, null=True, help_text="Link to conference website")
+    description = models.TextField(blank=True)
+    image       = models.ImageField(
+        upload_to='conferences/',
+        null=True,
+        blank=True
+    )
+    is_published = models.BooleanField(default=True)
+    created_at  = models.DateTimeField(auto_now_add=True)
+    updated_at  = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-date', 'name']
+
+    def __str__(self):
+        return f"{self.name} ({self.date.year})"
