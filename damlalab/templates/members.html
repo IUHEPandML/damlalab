@@ -1,89 +1,172 @@
 {% extends 'partials/_base.html' %}
 {% load static %}
 
-{% block title %}Team – DAMLA Lab{% endblock %}
+{% block title %}Research Groups – DAMLA Lab{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
 <header class="bg-gradient-to-r from-white to-teal-600 text-black py-16 text-center">
   <div class="max-w-4xl mx-auto px-4">
-    <h1 class="text-5xl font-bold mb-4">Our Team</h1>
-    <p class="text-xl">Students, Supervisors, and Principal Investigators at DAMLA Lab</p>
+    <h1 class="text-5xl font-bold mb-4">Research Groups</h1>
+    <p class="text-xl">Professors, Current Students, and Previous Students at DAMLA Lab</p>
   </div>
 </header>
 
 <section class="py-12 bg-gray-50">
   <div class="max-w-6xl mx-auto px-4 space-y-16">
 
-    <!-- Students -->
+    <!-- Professors Section -->
     <div>
-      <h2 class="text-3xl font-bold text-gray-800 mb-6">Students</h2>
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Professors</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {% for p in students %}
+        {% for prof in professors %}
         <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-2xl transition-shadow">
-          <h3 class="text-xl font-semibold text-gray-800">{{ p.name }}</h3>
-          {% if p.affiliation %}
-          <p class="text-gray-500 mt-1">{{ p.affiliation }}</p>
+          <h3 class="text-lg font-semibold text-gray-800">{{ prof.title }} {{ prof.first_name }} {{ prof.last_name }}</h3>
+          {% if prof.biography %}
+          <div class="mt-2 text-sm text-gray-600">
+            <p class="bio-text" id="bio-{{ prof.id }}">
+              {% if prof.biography|length > 150 %}
+                <span class="bio-short">{{ prof.biography|truncatewords:20 }}</span>
+                <span class="bio-full" style="display: none;">{{ prof.biography }}</span>
+                <button class="text-teal-600 hover:text-teal-700 font-semibold ml-1 read-more-btn" onclick="toggleBio({{ prof.id }})">
+                  Read more
+                </button>
+              {% else %}
+                {{ prof.biography }}
+              {% endif %}
+            </p>
+          </div>
           {% endif %}
-          {% if p.email %}
-          <a href="mailto:{{ p.email }}"
-             class="mt-2 inline-block text-blue-600 hover:underline text-sm">
-            {{ p.email }}
+          {% if prof.avesis_link %}
+          <a href="{{ prof.avesis_link }}" target="_blank" rel="noopener noreferrer"
+             class="mt-4 inline-block bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition text-sm">
+            Avesis Profile
           </a>
           {% endif %}
         </div>
         {% empty %}
-        <p class="text-center text-gray-600">No students found.</p>
+        <p class="text-center text-gray-600">No professors found.</p>
         {% endfor %}
       </div>
     </div>
 
-    <!-- Supervisors -->
+    <!-- Current Students Section -->
     <div>
-      <h2 class="text-3xl font-bold text-gray-800 mb-6">Supervisors</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {% for p in supervisors %}
-        <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-2xl transition-shadow">
-          <h3 class="text-xl font-semibold text-gray-800">{{ p.name }}</h3>
-          {% if p.affiliation %}
-          <p class="text-gray-500 mt-1">{{ p.affiliation }}</p>
-          {% endif %}
-          {% if p.email %}
-          <a href="mailto:{{ p.email }}"
-             class="mt-2 inline-block text-blue-600 hover:underline text-sm">
-            {{ p.email }}
-          </a>
-          {% endif %}
+      <h2 class="text-3xl font-bold text-gray-800 mb-8">Current Students</h2>
+      
+      <!-- Graduate Students -->
+      <div class="mb-10">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Graduate Students</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {% for student in current_grad_students %}
+          <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-2xl transition-shadow">
+            <h4 class="text-lg font-semibold text-gray-800">{{ student.first_name }} {{ student.last_name }}</h4>
+            {% if student.email %}
+            <a href="mailto:{{ student.email }}" class="text-blue-600 hover:underline text-sm mt-1 block">
+              {{ student.email }}
+            </a>
+            {% endif %}
+            {% if student.advisor %}
+            <p class="text-gray-600 text-sm mt-2">Advisor: {{ student.advisor.title }} {{ student.advisor.last_name }}</p>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p class="text-center text-gray-600 col-span-full">No graduate students found.</p>
+          {% endfor %}
         </div>
-        {% empty %}
-        <p class="text-center text-gray-600">No supervisors found.</p>
-        {% endfor %}
+      </div>
+
+      <!-- Undergraduate Students -->
+      <div>
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Undergraduate Students</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {% for student in current_ug_students %}
+          <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-2xl transition-shadow">
+            <h4 class="text-lg font-semibold text-gray-800">{{ student.first_name }} {{ student.last_name }}</h4>
+            {% if student.email %}
+            <a href="mailto:{{ student.email }}" class="text-blue-600 hover:underline text-sm mt-1 block">
+              {{ student.email }}
+            </a>
+            {% endif %}
+            {% if student.advisor %}
+            <p class="text-gray-600 text-sm mt-2">Advisor: {{ student.advisor.title }} {{ student.advisor.last_name }}</p>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p class="text-center text-gray-600 col-span-full">No undergraduate students found.</p>
+          {% endfor %}
+        </div>
       </div>
     </div>
 
-    <!-- Principal Investigators -->
+    <!-- Previous Students Section -->
     <div>
-      <h2 class="text-3xl font-bold text-gray-800 mb-6">Principal Investigators</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {% for p in pis %}
-        <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-2xl transition-shadow">
-          <h3 class="text-xl font-semibold text-gray-800">{{ p.name }}</h3>
-          {% if p.affiliation %}
-          <p class="text-gray-500 mt-1">{{ p.affiliation }}</p>
-          {% endif %}
-          {% if p.email %}
-          <a href="mailto:{{ p.email }}"
-             class="mt-2 inline-block text-blue-600 hover:underline text-sm">
-            {{ p.email }}
-          </a>
-          {% endif %}
+      <h2 class="text-3xl font-bold text-gray-800 mb-8">Previous Students</h2>
+      
+      <!-- Previous Graduate Students -->
+      <div class="mb-10">
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Graduate Students</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {% for student in previous_grad_students %}
+          <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-2xl transition-shadow">
+            <h4 class="text-lg font-semibold text-gray-800">{{ student.first_name }} {{ student.last_name }}</h4>
+            {% if student.email %}
+            <a href="mailto:{{ student.email }}" class="text-blue-600 hover:underline text-sm mt-1 block">
+              {{ student.email }}
+            </a>
+            {% endif %}
+            {% if student.advisor %}
+            <p class="text-gray-600 text-sm mt-2">Advisor: {{ student.advisor.title }} {{ student.advisor.last_name }}</p>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p class="text-center text-gray-600 col-span-full">No previous graduate students found.</p>
+          {% endfor %}
         </div>
-        {% empty %}
-        <p class="text-center text-gray-600">No principal investigators found.</p>
-        {% endfor %}
+      </div>
+
+      <!-- Previous Undergraduate Students -->
+      <div>
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4">Undergraduate Students</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {% for student in previous_ug_students %}
+          <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-2xl transition-shadow">
+            <h4 class="text-lg font-semibold text-gray-800">{{ student.first_name }} {{ student.last_name }}</h4>
+            {% if student.email %}
+            <a href="mailto:{{ student.email }}" class="text-blue-600 hover:underline text-sm mt-1 block">
+              {{ student.email }}
+            </a>
+            {% endif %}
+            {% if student.advisor %}
+            <p class="text-gray-600 text-sm mt-2">Advisor: {{ student.advisor.title }} {{ student.advisor.last_name }}</p>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p class="text-center text-gray-600 col-span-full">No previous undergraduate students found.</p>
+          {% endfor %}
+        </div>
       </div>
     </div>
 
   </div>
 </section>
+
+<script>
+function toggleBio(profId) {
+  const bioText = document.getElementById('bio-' + profId);
+  const bioShort = bioText.querySelector('.bio-short');
+  const bioFull = bioText.querySelector('.bio-full');
+  const readMoreBtn = bioText.querySelector('.read-more-btn');
+  
+  if (bioFull.style.display === 'none') {
+    bioShort.style.display = 'none';
+    bioFull.style.display = 'inline';
+    readMoreBtn.textContent = 'Read less';
+  } else {
+    bioShort.style.display = 'inline';
+    bioFull.style.display = 'none';
+    readMoreBtn.textContent = 'Read more';
+  }
+}
+</script>
 {% endblock %}
