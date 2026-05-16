@@ -9,7 +9,7 @@ class PersonAdmin(admin.ModelAdmin):
 
 @admin.register(Professor)
 class ProfessorAdmin(admin.ModelAdmin):
-    list_display  = ('get_full_name', 'title', 'email', 'is_active')
+    list_display  = ('full_name_display', 'title', 'email', 'is_active')
     list_filter   = ('is_active', 'created_at')
     search_fields = ('first_name', 'last_name', 'email')
     readonly_fields = ('created_at', 'updated_at')
@@ -27,14 +27,14 @@ class ProfessorAdmin(admin.ModelAdmin):
         }),
     )
     
-    def get_full_name(self, obj):
+    def full_name_display(self, obj):
         return f"{obj.title} {obj.first_name} {obj.last_name}"
-    get_full_name.short_description = 'Full Name'
+    full_name_display.short_description = 'Full Name'
 
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display  = ('get_full_name', 'student_type', 'status', 'advisor', 'email')
+    list_display  = ('full_name_display', 'student_type', 'status', 'advisor', 'email')
     list_filter   = ('status', 'student_type', 'created_at')
     search_fields = ('first_name', 'last_name', 'email')
     readonly_fields = ('created_at', 'updated_at')
@@ -52,9 +52,9 @@ class StudentAdmin(admin.ModelAdmin):
         }),
     )
     
-    def get_full_name(self, obj):
+    def full_name_display(self, obj):
         return f"{obj.first_name} {obj.last_name}"
-    get_full_name.short_description = 'Full Name'
+    full_name_display.short_description = 'Full Name'
 
 
 @admin.register(Announcement)
