@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">DAMLA Lab logo</title>
+  <desc id="desc">Circular DAMLA Lab logo with surrounding text, mountain line, and founding year.</desc>
+  <defs>
+    <style>
+      .ring { fill: #12264f; stroke: #f4d06f; stroke-width: 12; }
+      .outer-text { fill: #f4d06f; font: 600 21px/1.2 Arial, Helvetica, sans-serif; letter-spacing: 2px; }
+      .brand { fill: #ffffff; font: 700 64px/1 Arial, Helvetica, sans-serif; letter-spacing: 1px; }
+      .year { fill: #f4d06f; font: 600 22px/1 Arial, Helvetica, sans-serif; }
+      .line { fill: none; stroke: #ffffff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <path id="topArc" d="M 74 256 A 182 182 0 0 1 438 256" />
+  </defs>
+
+  <circle class="ring" cx="256" cy="256" r="208" />
+  <circle cx="256" cy="256" r="184" fill="none" stroke="#f4d06f" stroke-width="4" opacity="0.45" />
+
+  <text class="outer-text">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">DATA ANALYSIS AND MACHINE LEARNING APPLICATIONS RESEARCH LABORATORY</textPath>
+  </text>
+
+  <path class="line" d="M 120 300 L 186 242 L 230 286 L 274 188 L 326 236 L 392 160" />
+  <path class="line" d="M 120 300 L 162 260" opacity="0.9" />
+  <path class="line" d="M 162 260 L 186 242" opacity="0.9" />
+
+  <text class="brand" x="256" y="330" text-anchor="middle">DAMLA</text>
+  <text class="brand" x="256" y="386" text-anchor="middle" style="font-size: 42px; letter-spacing: 3px;">LAB</text>
+
+  <text class="year" x="256" y="472" text-anchor="middle">2022</text>
+</svg>

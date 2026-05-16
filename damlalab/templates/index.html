@@ -20,7 +20,7 @@
       <div id="announcement-slider" class="relative overflow-hidden rounded-lg h-80">
         <div class="relative h-full">
           {% for ann in announcements %}
-            <div class="announcement-card absolute inset-0 transition-opacity duration-700 ease-in-out {% if forloop.first %}opacity-100{% else %}opacity-0{% endif %}">
+            <div class="announcement-card absolute inset-0 transition-opacity duration-700 ease-in-out {% if forloop.first %}opacity-100 pointer-events-auto{% else %}opacity-0 pointer-events-none{% endif %}">
               <div class="flex h-full bg-white rounded-lg overflow-hidden shadow-lg">
                 
                 <!-- SOL: Resim + Gradient -->
@@ -56,7 +56,7 @@
                   {% if ann.link %}
                     <a href="{{ ann.link }}" target="_blank"
                       class="self-end bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                      Detaylı Bilgi
+                      More Details
                     </a>
                   {% endif %}
                 </div>
@@ -117,6 +117,8 @@
       cards.forEach((c, i) => {
         c.classList.toggle('opacity-100', i === idx);
         c.classList.toggle('opacity-0',    i !== idx);
+        c.classList.toggle('pointer-events-auto', i === idx);
+        c.classList.toggle('pointer-events-none', i !== idx);
       });
     }
 
