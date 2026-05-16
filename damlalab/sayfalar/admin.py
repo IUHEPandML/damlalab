@@ -38,6 +38,7 @@ class StudentAdmin(admin.ModelAdmin):
     list_filter   = ('status', 'student_type', 'created_at')
     search_fields = ('first_name', 'last_name', 'email')
     readonly_fields = ('created_at', 'updated_at')
+    raw_id_fields = ('advisor',)
     
     fieldsets = (
         ('Personal Information', {
