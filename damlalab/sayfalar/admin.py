@@ -77,6 +77,7 @@ class ThesisAdmin(admin.ModelAdmin):
     search_fields = ('title', 'abstract')
 
     filter_horizontal = ('students', 'supervisors', 'principal_investigators')
+    inlines = [ThesisParticipationInline]
 
     fieldsets = (
         (None, {
@@ -93,6 +94,8 @@ class ThesisAdmin(admin.ModelAdmin):
             'description': 'Select Students from Student table and Professors for supervisor/PI roles.'
         }),
     )
+
+
 class ProjectParticipationInline(admin.TabularInline):
     model               = ProjectParticipation
     extra               = 1
@@ -104,6 +107,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter   = ('is_published',)
     search_fields = ('title', 'description')
     filter_horizontal = ('students', 'supervisors', 'principal_investigators')
+    inlines = [ProjectParticipationInline]
     
     fieldsets     = (
         (None, {
