@@ -129,25 +129,8 @@ class PositionAdmin(admin.ModelAdmin):
     list_display    = ('title', 'position_type', 'is_published', 'order')
     list_filter     = ('position_type', 'is_published')
     search_fields   = ('title', 'description', 'skills', 'eligibility')
-    list_editable  = ('is_published', 'order')
+    list_editable   = ('is_published', 'order')
     prepopulated_fields = {'slug': ('title',)}
-    fieldsets = (
-        (None, {
-            'fields': (
-                'title', 'slug', 'position_type', 'is_published', 'order'
-            )
-        }),
-        ('Details', {
-            'fields': (
-                'description', 'eligibility', 'skills', 'commitment', 'contact_email'
-            )
-        }),
-        ('Application', {
-            'fields': (
-                'apply_link',
-            )
-        }),
-    )
 
 
 @admin.register(Topic)
