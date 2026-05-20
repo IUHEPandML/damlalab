@@ -126,8 +126,15 @@ def contact(request):
 
 def positions(request):
     positions = Position.objects.filter(is_published=True).order_by('order')
+    ug_positions = [p for p in positions if p.position_type == Position.TYPE_UNDERGRADUATE]
+    gr_positions = [p for p in positions if p.position_type == Position.TYPE_GRADUATE]
+    pd_positions = [p for p in positions if p.position_type == Position.TYPE_POSTDOC]
+    
     return render(request, 'positions.html', {
         'positions': positions,
+        'ug_positions': ug_positions,
+        'gr_positions': gr_positions,
+        'pd_positions': pd_positions,
     })
 
 def topics(request):

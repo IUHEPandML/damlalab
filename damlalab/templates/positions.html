@@ -12,10 +12,34 @@
   </div>
 </header>
 
+<!-- Research Areas Introduction Section -->
+<section class="py-12 bg-white">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="prose prose-lg max-w-none text-gray-700 space-y-4">
+      <p>Our research areas, which are described in detail in the research section, include:</p>
+      <ul class="list-disc list-inside space-y-2 ml-2">
+        <li>Analysis of data collected by the CMS detector</li>
+        <li>Studies in Standard Model and Beyond the Standard Model (new physics) physics</li>
+        <li>Applications of machine learning models
+          <ul class="list-disc list-inside space-y-1 ml-8 mt-2">
+            <li>In analyses in high energy physics</li>
+            <li>In healthcare applications, e.g., analysis of lung imaging</li>
+          </ul>
+        </li>
+        <li>Particle physics phenomenology</li>
+      </ul>
+      <p class="mt-6">We invite students who are interested in programming, eager to study the Standard Model of particle physics or explore the possibilities of discovering physics beyond the Standard Model, and motivated to learn and specialize in rapidly developing machine learning methods and their applications, to join our research groups.</p>
+      <p>If you would like to work with the DAMLA-Lab research group in a highly motivated and research-oriented environment, and make a strong start to your career in an atmosphere comparable to international research environments, please get in touch with us.</p>
+      <p>Students interested in these research topics are welcome to join our research groups either during their undergraduate studies or for their graduate studies. Interested candidates can contact us through the provided contact addresses.</p>
+    </div>
+  </div>
+</section>
+
 <section class="py-12 bg-gray-50">
   <div class="max-w-4xl mx-auto px-4 space-y-16">
 
     <!-- Undergraduate Positions -->
+    {% if ug_positions %}
     <div>
       <h2 class="text-3xl font-bold text-gray-800 mb-6">Undergraduate Positions</h2>
       <div class="space-y-8">
@@ -65,8 +89,10 @@
         {% endfor %}
       </div>
     </div>
+    {% endif %}
 
     <!-- Graduate Positions -->
+    {% if gr_positions %}
     <div>
       <h2 class="text-3xl font-bold text-gray-800 mb-6">Graduate Positions</h2>
       <div class="space-y-8">
@@ -116,8 +142,10 @@
         {% endfor %}
       </div>
     </div>
+    {% endif %}
 
     <!-- Postdoctoral Positions -->
+    {% if pd_positions %}
     <div>
       <h2 class="text-3xl font-bold text-gray-800 mb-6">Postdoctoral Positions</h2>
       <div class="space-y-8">
@@ -167,6 +195,7 @@
         {% endfor %}
       </div>
     </div>
+    {% endif %}
 
   </div>
 </section>
