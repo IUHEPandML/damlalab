@@ -380,3 +380,141 @@ class Conference(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.date.year})"
+
+
+class ResearchAnalysis(models.Model):
+    CATEGORY_CMS = 'cms'
+    CATEGORY_SIMULATION = 'simulation'
+    CATEGORY_ML = 'ml'
+    CATEGORY_PHENOMENOLOGY = 'phenomenology'
+    CATEGORY_CHOICES = [
+        (CATEGORY_CMS, 'CMS Data Analysis'),
+        (CATEGORY_SIMULATION, 'Simulation Based Data Analysis'),
+        (CATEGORY_ML, 'Machine Learning Based Data Analysis'),
+        (CATEGORY_PHENOMENOLOGY, 'Phenomenological High Energy Physics'),
+    ]
+
+    title        = models.CharField(max_length=200)
+    slug         = models.SlugField(max_length=220, unique=True, blank=True)
+    category     = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES
+    )
+    description  = models.TextField(help_text="Detailed description of the analysis")
+    short_description = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Brief one-liner for card preview"
+    )
+    image        = models.ImageField(
+        upload_to='analysis/',
+        null=True,
+        blank=True
+    )
+    link         = models.URLField(blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    order        = models.PositiveIntegerField(default=0, help_text="Display order within category")
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
+
+    students     = models.ManyToManyField(
+        Student,
+        blank=True,
+        related_name='analysis_research'
+    )
+    supervisors  = models.ManyToManyField(
+        Professor,
+        blank=True,
+        related_name='supervised_analysis'
+    )
+    principal_investigators = models.ManyToManyField(
+        Professor,
+        blank=True,
+        related_name='pi_analysis'
+    )
+
+    class Meta:
+        ordering = ['category', 'order', 'title']
+        verbose_name_plural = 'Research Analyses'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title)[:200]
+            slug = base
+            cnt = 1
+            while ResearchAnalysis.objects.filter(slug=slug).exists():
+                slug = f"{base}-{cnt}"
+                cnt += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.title} ({self.get_category_display()})"
+
+
+class Publication(models.Model):
+    TYPE_PAPERS = 'papers'
+    TYPE_PRESENTATIONS = 'presentations'
+    TYPE_ORAL = 'oral'
+    TYPE_POSTER = 'poster'
+    TYPE_CHOICES = [
+        (TYPE_PAPERS, 'Papers'),
+        (TYPE_PRESENTATIONS, 'Presentations'),
+        (TYPE_ORAL, 'Oral Presentations'),
+        (TYPE_POSTER, 'Poster Presentations'),
+    ]
+
+    title        = models.CharField(max_length=300)
+    slug         = models.SlugField(max_length=320, unique=True, blank=True)
+    publication_type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES
+    )
+    year         = models.PositiveIntegerField()
+    authors      = models.TextField(help_text="Authors list, one per line or comma separated")
+    supervisor   = models.ForeignKey(
+        Professor,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='publications'
+    )
+    
+    # Optional fields
+    description  = models.TextField(blank=True, help_text="Abstract or brief description")
+    venue        = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text="Journal name for Papers, Conference name for Presentations"
+    )
+    doi          = models.CharField(max_length=100, blank=True, help_text="DOI number")
+    link         = models.URLField(blank=True, null=True, help_text="Link to paper, PDF, or event")
+    image        = models.ImageField(
+        upload_to='publications/',
+        null=True,
+        blank=True
+    )
+    event_date   = models.DateField(null=True, blank=True, help_text="For presentations")
+    event_location = models.CharField(max_length=300, blank=True, help_text="For presentations")
+    
+    is_published = models.BooleanField(default=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-year', '-created_at']
+        verbose_name_plural = 'Publications'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title)[:300]
+            slug = base
+            cnt = 1
+            while Publication.objects.filter(slug=slug).exists():
+                slug = f"{base}-{cnt}"
+                cnt += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.title} ({self.year})"

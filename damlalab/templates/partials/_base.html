@@ -18,9 +18,9 @@
         <a href="{% url 'home' %}" class="text-white px-3 py-2 rounded hover:bg-gray-700">Home</a>
         <a href="{% url 'research_groups' %}" class="text-white px-3 py-2 rounded hover:bg-gray-700">Research Groups</a>
         <div class="relative group">
-          <button class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700 inline-flex items-center">
+          <a href="{% url 'research_analysis' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700 inline-flex items-center">
             Research <svg class="ml-1 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 9l-7 7-7-7"/></svg>
-          </button>
+          </a>
           <div class="relative inline-block group">
             <div
               class="absolute right-0 mt-2 w-48 bg-gray-800 rounded shadow-lg dropdown-menu transition-opacity duration-200 ease-in-out opacity-0 pointer-events-none"
@@ -40,6 +40,10 @@
               <a href="{% url 'conferences' %}"
                 class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
                 Conferences
+              </a>
+              <a href="{% url 'publications' %}"
+                class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
+                Publications
               </a>
             </div>
           </div>
@@ -83,7 +87,9 @@
       <a href="{% url 'theses' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Theses</a>
       <a href="{% url 'projects' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Projects</a>
       <a href="{% url 'topics' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Topics</a>
+      <a href="{% url 'research_analysis' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Research Analysis</a>
       <a href="{% url 'conferences' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Conferences</a>
+      <a href="{% url 'publications' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Publications</a>
       <a href="" class="block px-4 py-2 text-gray-300 hover:text-white">Open Positions</a>
       <a href="{% url 'contact' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Contacts</a>
     </div>
