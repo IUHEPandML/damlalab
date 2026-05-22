@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
-from .models import Person, Announcement, Thesis, ThesisParticipation , Project, ProjectParticipation , Position, Professor, Student, Topic, Conference
+from .models import Person, Announcement, Thesis, ThesisParticipation , Project, ProjectParticipation , Position, Professor, Student, Topic, Conference, ResearchAnalysis, Publication
 
 # Monkey patch for Django 5.0.2 template bug
 original_init = ChangeList.__init__
@@ -79,3 +79,21 @@ class ConferenceAdmin(admin.ModelAdmin):
     list_display    = ('name', 'date', 'location', 'is_published')
     list_filter     = ('is_published', 'date', 'location')
     search_fields   = ('name', 'location', 'description')
+
+
+@admin.register(ResearchAnalysis)
+class ResearchAnalysisAdmin(admin.ModelAdmin):
+    list_display    = ('title', 'category', 'order', 'is_published')
+    list_filter     = ('category', 'is_published', 'created_at')
+    search_fields   = ('title', 'description')
+    prepopulated_fields = {'slug': ('title',)}
+    filter_horizontal = ('students', 'supervisors', 'principal_investigators')
+
+
+@admin.register(Publication)
+class PublicationAdmin(admin.ModelAdmin):
+    list_display    = ('title', 'publication_type', 'year', 'supervisor', 'is_published')
+    list_filter     = ('publication_type', 'year', 'is_published', 'created_at')
+    search_fields   = ('title', 'authors', 'venue', 'description')
+    prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ('created_at', 'updated_at')

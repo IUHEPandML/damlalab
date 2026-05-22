@@ -9,6 +9,8 @@ from .models import (
     Position,
     Topic,
     Conference,
+    ResearchAnalysis,
+    Publication,
 )
 
 def home(request):
@@ -153,4 +155,69 @@ def conferences(request):
     conferences = Conference.objects.filter(is_published=True).order_by('-date')
     return render(request, 'conferences.html', {
         'conferences': conferences,
+    })
+
+def research_analysis(request):
+    analyses = ResearchAnalysis.objects.filter(is_published=True).prefetch_related(
+        'students', 'supervisors', 'principal_investigators'
+    )
+    
+    # Group by category
+    categories = {}
+    for category_code, category_name in ResearchAnalysis.CATEGORY_CHOICES:
+        category_analyses = analyses.filter(category=category_code).order_by('order', 'title')
+        
+        # Prepare participant lists
+        for analysis in category_analyses:
+            analysis.students_list = [f"{s.first_name} {s.last_name}" for s in analysis.students.all()]
+            analysis.supervisors_list = [f"{p.first_name} {p.last_name}" for p in analysis.supervisors.all()]
+            analysis.pis_list = [f"{p.first_name} {p.last_name}" for p in analysis.principal_investigators.all()]
+        
+        if category_analyses.exists():
+            categories[category_name] = list(category_analyses)
+    
+    return render(request, 'research_analysis.html', {
+        'categories': categories,
+    })
+
+def research_analysis_detail(request, slug):
+    analysis = get_object_or_404(ResearchAnalysis, slug=slug, is_published=True)
+    
+    # Get students, supervisors and PIs
+    students = [f"{s.first_name} {s.last_name}" for s in analysis.students.all()]
+    supervisors = [f"{p.first_name} {p.last_name}" for p in analysis.supervisors.all()]
+    pis = [f"{p.first_name} {p.last_name}" for p in analysis.principal_investigators.all()]
+    
+    # Get related analyses from same category
+    related_analyses = ResearchAnalysis.objects.filter(
+        category=analysis.category,
+        is_published=True
+    ).exclude(pk=analysis.pk).order_by('order', 'title')[:3]
+    
+    # Prepare participant lists for related analyses
+    for related in related_analyses:
+        related.students_list = [f"{s.first_name} {s.last_name}" for s in related.students.all()]
+        related.supervisors_list = [f"{p.first_name} {p.last_name}" for p in related.supervisors.all()]
+        related.pis_list = [f"{p.first_name} {p.last_name}" for p in related.principal_investigators.all()]
+    
+    return render(request, 'research_analysis_detail.html', {
+        'analysis': analysis,
+        'students': students,
+        'supervisors': supervisors,
+        'pis': pis,
+        'related_analyses': related_analyses,
+    })
+
+def publications(request):
+    publications = Publication.objects.filter(is_published=True).order_by('-year', '-created_at')
+    
+    # Group by type
+    pub_types = {}
+    for type_code, type_name in Publication.TYPE_CHOICES:
+        type_pubs = publications.filter(publication_type=type_code)
+        if type_pubs.exists():
+            pub_types[type_name] = list(type_pubs)
+    
+    return render(request, 'publications.html', {
+        'pub_types': pub_types,
     })
