@@ -4,84 +4,101 @@
 {% block title %}Home – DAMLA Lab{% endblock %}
 
 {% block content %}
-  <!-- Başlık -->
-  <header class="bg-gradient-to-r from-white to-teal-600 text-black py-16 text-center">
-    <div class="max-w-4xl mx-auto px-4">
-      <h1 class="text-5xl font-bold mb-4">Welcome to DAMLA Lab</h1>
-      <p class="text-xl">Pioneering research in data analysis and machine learning applications.</p>
+  <!-- Welcome Hero (added per request) -->
+  <section class="w-full flex items-center py-12 md:py-16 bg-gradient-to-r from-white via-teal-100 to-teal-500">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4">Welcome to DAMLA Lab</h1>
+      <p class="text-lg md:text-2xl text-gray-800 max-w-3xl mx-auto">Pioneering research in data analysis and machine learning applications.</p>
     </div>
-  </header>
+  </section>
 
-  <!-- Duyuru Slider -->
-  <section class="py-12 bg-gray-100">
-    <div class="max-w-6xl mx-auto px-4">
-      <h3 class="text-3xl font-bold text-gray-800 text-center mb-8">Announcements</h3>
+  <!-- Yarı Ekran Duyuru Hero Slider (h-[50vh] yapıldı) -->
+  <section class="relative w-full h-[50vh] overflow-hidden bg-gray-900">
+    <div id="announcement-slider" class="relative w-full h-full">
+      {% for ann in announcements %}
+        <div class="announcement-card absolute inset-0 transition-opacity duration-700 ease-in-out {% if forloop.first %}opacity-100 pointer-events-auto{% else %}opacity-0 pointer-events-none{% endif %}">
+          <!-- Arka Plan Görseli -->
+          <div class="absolute inset-0">
+            {% if ann.image %}
+              <img src="{{ ann.image.url }}" alt="{{ ann.title }}" class="w-full h-full object-cover">
+            {% else %}
+              <div class="w-full h-full bg-gradient-to-r from-blue-900 to-gray-900"></div>
+            {% endif %}
+            <!-- Karartma Katmanı -->
+            <div class="absolute inset-0 bg-black bg-opacity-45"></div>
+          </div>
 
-      <div id="announcement-slider" class="relative overflow-hidden rounded-lg h-80">
-        <div class="relative h-full">
-          {% for ann in announcements %}
-            <div class="announcement-card absolute inset-0 transition-opacity duration-700 ease-in-out {% if forloop.first %}opacity-100 pointer-events-auto{% else %}opacity-0 pointer-events-none{% endif %}">
-              <div class="flex h-full bg-white rounded-lg overflow-hidden shadow-lg">
-                
-                <!-- SOL: Resim + Gradient -->
-                <div class="w-1/2 relative">
-                  {% if ann.image %}
-                    <img src="{{ ann.image.url }}" alt="{{ ann.title }}" class="w-full h-full object-cover">
-                  {% else %}
-                    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <span class="text-gray-500">No Image</span>
-                    </div>
-                  {% endif %}
-                  <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-gray-100 to-transparent"></div>
-                </div>
-
-                <!-- SAĞ: Metin + Buton -->
-                <div class="w-1/2 p-6 flex flex-col justify-between">
-                  <div>
-                    <h4 class="text-2xl font-semibold text-gray-800 mb-2">
-                      {% if ann.link %}
-                        <a href="{{ ann.link }}" target="_blank" class="hover:text-blue-600 transition">
-                          {{ ann.title }}
-                        </a>
-                      {% else %}
-                        {{ ann.title }}
-                      {% endif %}
-                    </h4>
-                    <p class="text-gray-500 text-sm mb-4">{{ ann.date }}</p>
-                    <!-- burada 20 kelimeyle sınırladık -->
-                    <p class="text-gray-700 mb-4">
-                      {{ ann.short_info|truncatewords:20 }}
-                    </p>
-                  </div>
-                  {% if ann.link %}
-                    <a href="{{ ann.link }}" target="_blank"
-                      class="self-end bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                      More Details
-                    </a>
-                  {% endif %}
-                </div>
-
-              </div>
+          <!-- İçerik Alanı: Sağ Tarafa Hizalı ve Boyutları Küçültülmüş -->
+          <div class="absolute inset-0 flex items-center pr-16">
+            <div class="max-w-2xl text-white ml-auto mr-12 p-4">
+              <h2 class="text-3xl md:text-4xl font-bold mb-3 leading-tight">
+                {% if ann.link %}
+                  <a href="{{ ann.link }}" target="_blank" class="hover:text-blue-400 transition">
+                    {{ ann.title }}
+                  </a>
+                {% else %}
+                  {{ ann.title }}
+                {% endif %}
+              </h2>
+              <p class="text-base md:text-lg text-gray-200 mb-4 leading-relaxed">
+                {{ ann.short_info|truncatewords:25 }}
+              </p>
+              {% if ann.link %}
+                <a href="{{ ann.link }}" target="_blank"
+                  class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition font-semibold text-sm">
+                  Read More
+                </a>
+              {% endif %}
             </div>
-          {% empty %}
-            <p class="text-center text-gray-600">No announcements at this time.</p>
-          {% endfor %}
+          </div>
         </div>
+      {% empty %}
+        <div class="absolute inset-0 flex items-center justify-center bg-gray-900">
+          <p class="text-center text-gray-400 text-2xl">No announcements at this time.</p>
+        </div>
+      {% endfor %}
+    </div>
 
-        {% if announcements|length > 1 %}
-          <button id="prev-btn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 p-2 rounded-full z-20">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
-          </button>
-          <button id="next-btn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 p-2 rounded-full z-20">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
-          </button>
-        {% endif %}
+    <!-- Navigasyon Butonları (Yarı boyuta göre bottom-6 olarak yukarı çekildi) -->
+    {% if announcements|length > 1 %}
+      <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-6 z-20">
+        <button id="prev-btn" class="bg-white bg-opacity-30 hover:bg-opacity-60 text-white p-3 rounded-full transition-all">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <span id="slide-counter" class="text-white text-lg font-semibold min-w-16 text-center">1 / {{ announcements|length }}</span>
+        <button id="next-btn" class="bg-white bg-opacity-30 hover:bg-opacity-60 text-white p-3 rounded-full transition-all">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Biz Kimiz -->
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Who Are We</h2>
+      
+      <div class="text-gray-700 leading-relaxed space-y-6">
+        <p>
+          Data Analysis and Machine Learning Application laboratory (DAMLA-LAB) was built in 2022 within the concept of TUBİTAK 2232-A International Fellowship for Outstanding Researchers Project which was led by Dr. Hale Sert in the Department of Physics of Istanbul University. The laboratory is located in the building of D block G01 in the Faculty of Science, Department of Physics.
+        </p>
+        
+        <p>
+          Our research groups, within the laboratory, continue their work in data analysis studies in particle physics as well as application of machine learning not only in particle physics but also in interdisciplinary areas.
+        </p>
+        
+        <p>
+          Data analysis studies in particle physics involve the analysis of the data collected in the CMS (Compact Muon Solenoid) detector which is one of the LHC detectors as well as analysis of the data that are simulated for the experiments planned to be built in future. The Large Hadron Collider (LHC), located at CERN, in the border of France and Switzerland, which is one of the large particle physics research institutes in the world, accelerates the proton bunches to high energies and collides them in four different points. There are four different detectors placed in the collision points where each reserves different physics motivations. We are working on the CMS experiment. We focus especially on the tau lepton reconstruction and identification in both online (trigger) and offline levels as well as jet physics. Concerning the future experiments, simulation based studies for example for the FCC-hh are ongoing. Studies in these areas cover the Standard Model and Beyond the Standard Model Physics (New Physics) topics.
+        </p>
+        
+        <p>
+          Machine learning application studies covers the classification of different signals and tagging different particles in high energy physics experiments as well as binary and multiclassification of medical images by using deep learning methods.
+        </p>
       </div>
     </div>
   </section>
 
-
-  <!-- Araştırma Konuları -->
+  <!-- Research Topics Grid -->
   <section class="py-12 bg-gradient-to-r from-blue-50 to-white">
     <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {% for topic in topics %}
@@ -116,31 +133,45 @@
     function showSlide(idx) {
       cards.forEach((c, i) => {
         c.classList.toggle('opacity-100', i === idx);
-        c.classList.toggle('opacity-0',    i !== idx);
+        c.classList.toggle('opacity-0', i !== idx);
         c.classList.toggle('pointer-events-auto', i === idx);
         c.classList.toggle('pointer-events-none', i !== idx);
       });
+      
+      const counter = document.getElementById('slide-counter');
+      if (counter) {
+        // JavaScript template literal hatası buralarda düzeltildi (`${}` formatına getirildi)
+        counter.textContent = `${idx + 1} / ${total}`;
+      }
     }
 
-    // Otomatik kaydırma
     let interval = setInterval(() => {
       current = (current + 1) % total;
       showSlide(current);
-    }, 5000);
+    }, 6000);
 
-    // Prev/Next kontrolleri
     const prev = document.getElementById('prev-btn');
     const next = document.getElementById('next-btn');
+    
     if (prev && next) {
       prev.addEventListener('click', () => {
         clearInterval(interval);
         current = (current - 1 + total) % total;
         showSlide(current);
+        interval = setInterval(() => {
+          current = (current + 1) % total;
+          showSlide(current);
+        }, 6000);
       });
-      next.addEventListener('click', () => {
+      
+      next.addEventListener('click', () => {  
         clearInterval(interval);
         current = (current + 1) % total;
         showSlide(current);
+        interval = setInterval(() => {
+          current = (current + 1) % total;
+          showSlide(current);
+        }, 6000);
       });
     }
   });
