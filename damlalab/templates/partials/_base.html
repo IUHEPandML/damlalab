@@ -99,9 +99,48 @@
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="bg-gray-800 text-gray-300 py-4">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      &copy; 2025 DAMLA Lab. All rights reserved.
+  <footer class="bg-gray-800 text-gray-300 py-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <!-- Information -->
+        <div>
+          <h4 class="text-white font-semibold mb-3">Information</h4>
+          <ul class="space-y-2">
+            <li><a href="{% url 'home' %}" class="text-gray-300 hover:text-white">Who are we?</a></li>
+            <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white">Contact us</a></li>
+            <li><a href="{% url 'conferences' %}" class="text-gray-300 hover:text-white">Events</a></li>
+            <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white">Directions</a></li>
+            <li><a href="{% url 'research_groups' %}" class="text-gray-300 hover:text-white">Academic staff</a></li>
+          </ul>
+        </div>
+
+        <!-- Studies -->
+        <div>
+          <h4 class="text-white font-semibold mb-3">Studies</h4>
+          <ul class="space-y-2">
+            <li><a href="{% url 'theses' %}" class="text-gray-300 hover:text-white">Theses</a></li>
+            <li><a href="{% url 'projects' %}" class="text-gray-300 hover:text-white">Projects</a></li>
+            <li><a href="{% url 'topics' %}" class="text-gray-300 hover:text-white">Topics</a></li>
+            <li><a href="{% url 'conferences' %}" class="text-gray-300 hover:text-white">Conferences</a></li>
+            <li><a href="{% url 'publications' %}" class="text-gray-300 hover:text-white">Publications</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h4 class="text-white font-semibold mb-3">Contact</h4>
+          <address class="not-italic text-gray-300 text-sm space-y-1">
+            <div>Istanbul/Fatih, Istanbul University, Science Faculty</div>
+            <div>Office: <a href="tel:+902124555700" class="hover:text-white">0212 455 57 00 / 15485</a></div>
+            <div>Lab: <a href="tel:+902124555700" class="hover:text-white">0212 455 57 00 / 15256</a></div>
+            <div>Email: <a href="mailto:damlalab.iuhep@gmail.com" class="hover:text-white">damlalab.iuhep@gmail.com</a></div>
+          </address>
+        </div>
+      </div>
+
+      <div class="mt-6 border-t border-gray-700 pt-4 text-center text-sm text-gray-400">
+        &copy; 2025 DAMLA Lab. All rights reserved.
+      </div>
     </div>
   </footer>
 
