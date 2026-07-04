@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%" role="img" aria-labelledby="title desc">
   <title id="title">DAMLA Lab Logo</title>
-  <desc id="desc">Data Analysis and Machine Learning Applications Research Laboratory Logo - DAMLA LAB - 2022</desc>
+  <desc id="desc">Data Analysis and Machine Learning Application Laboratory Logo - DAMLA LAB - 2022</desc>
   <defs>
     <!-- Top arc for the main laboratory name text -->
     <path id="text-path-top" d="M 74,300 A 226,226 0 0,1 526,300" fill="none" />
@@ -24,8 +24,8 @@
 
   <!-- Outer Ring Text (Circular) -->
   <!-- Top Text: Laboratory Name -->
-  <text font-family="'Outfit', 'Inter', 'Montserrat', Arial, sans-serif" font-size="16.5px" font-weight="900" fill="#eef0d8" letter-spacing="3.2px">
-    <textPath href="#text-path-top" startOffset="50%" text-anchor="middle">DATA ANALYSIS AND MACHINE LEARNING APPLICATIONS RESEARCH LABORATORY</textPath>
+  <text font-family="'Outfit', 'Inter', 'Montserrat', Arial, sans-serif" font-size="16.5px" font-weight="900" fill="#eef0d8" letter-spacing="4.5px">
+    <textPath href="#text-path-top" startOffset="50%" text-anchor="middle">DATA ANALYSIS AND MACHINE LEARNING  APPLICATION LABORATORY</textPath>
   </text>
 
   <!-- Bottom Text: Year -->
