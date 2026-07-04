@@ -10,3 +10,5 @@ python manage.py collectstatic --no-input
 
 # Veritabanı tablolarını Render üzerinde oluştur/güncelle
 python manage.py migrate
+
+python manage.py createsuperuser --noinput || true
