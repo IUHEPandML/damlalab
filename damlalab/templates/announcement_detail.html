@@ -44,7 +44,7 @@
         {% if announcement.link %}
         <a href="{{ announcement.link }}" target="_blank" rel="noopener noreferrer"
            class="inline-flex items-center bg-teal-600 text-white px-5 py-3 rounded-lg shadow hover:bg-teal-700 transition font-semibold text-sm">
-          Main Announcement Link
+          {{ announcement.link_label|default:"Main Announcement Link" }}
           <svg class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-4-4l8-8m0 0H8m8 0v8"/></svg>
         </a>
         {% endif %}
@@ -72,15 +72,7 @@
   </div>
 </section>
 
-<!-- Back to Research -->
-<section class="py-8 bg-gray-50 border-t border-gray-200">
-  <div class="max-w-4xl mx-auto px-4 text-center">
-    <a href="{% url 'research_analysis' %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
-      <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      Back to Research Analysis
-    </a>
-  </div>
-</section>
+
 
 <!-- Lightbox Modal -->
 <div id="lightbox-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center p-4 transition-opacity duration-300 opacity-0">

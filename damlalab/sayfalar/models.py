@@ -29,6 +29,11 @@ class Announcement(models.Model):
         blank=True
     )
     link         = models.URLField(blank=True, null=True)
+    link_label   = models.CharField(
+                       max_length=100,
+                       blank=True,
+                       help_text="Custom label for the main link, e.g. 'Register Here'"
+                   )
     is_published = models.BooleanField(default=True)
     nonstop      = models.BooleanField(
                        default=False,
