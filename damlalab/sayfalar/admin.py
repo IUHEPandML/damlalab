@@ -1,14 +1,15 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from .models import Person, Announcement, AnnouncementLink, Thesis, ThesisParticipation, Project, Position, Professor, Student, Topic, Conference, ResearchAnalysis, Publication, Activity, ActivityImage
 
 @admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(ImportExportModelAdmin):
     list_display  = ('name', 'email', 'affiliation')
     search_fields = ('name', 'email')
 
 
 @admin.register(Professor)
-class ProfessorAdmin(admin.ModelAdmin):
+class ProfessorAdmin(ImportExportModelAdmin):
     list_display  = ('full_name_display', 'title', 'email', 'is_active')
     list_filter   = ('is_active', 'created_at')
     search_fields = ('first_name', 'last_name', 'email')
@@ -33,7 +34,7 @@ class ProfessorAdmin(admin.ModelAdmin):
 
 
 @admin.register(Student)
-class StudentAdmin(admin.ModelAdmin):
+class StudentAdmin(ImportExportModelAdmin):
     list_display  = ('full_name_display', 'student_type', 'status', 'advisor', 'department', 'grade', 'email')
     list_filter   = ('status', 'student_type', 'created_at')
     search_fields = ('first_name', 'last_name', 'email', 'department', 'grade')
@@ -63,7 +64,7 @@ class AnnouncementLinkInline(admin.TabularInline):
 
 
 @admin.register(Announcement)
-class AnnouncementAdmin(admin.ModelAdmin):
+class AnnouncementAdmin(ImportExportModelAdmin):
     list_display  = ('title', 'date', 'is_published', 'nonstop', 'expires_at')
     list_filter   = ('is_published', 'date', 'nonstop')
     search_fields = ('title', 'short_info', 'description')
@@ -78,7 +79,7 @@ class ThesisParticipationInline(admin.TabularInline):
 
 
 @admin.register(Thesis)
-class ThesisAdmin(admin.ModelAdmin):
+class ThesisAdmin(ImportExportModelAdmin):
     list_display  = ('title', 'status', 'start_date', 'end_date', 'is_published')
     list_filter   = ('status', 'is_published')
     search_fields = ('title', 'abstract')
@@ -104,7 +105,7 @@ class ThesisAdmin(admin.ModelAdmin):
 
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(ImportExportModelAdmin):
     list_display  = ('title', 'project_level', 'institution', 'start_date', 'end_date', 'is_published')
     list_filter   = ('project_level', 'is_published')
     search_fields = ('title', 'description')
@@ -128,7 +129,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(Position)
-class PositionAdmin(admin.ModelAdmin):
+class PositionAdmin(ImportExportModelAdmin):
     list_display    = ('title', 'position_type', 'is_published', 'order')
     list_filter     = ('position_type', 'is_published')
     search_fields   = ('title', 'description', 'skills', 'eligibility')
@@ -154,7 +155,7 @@ class PositionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Topic)
-class TopicAdmin(admin.ModelAdmin):
+class TopicAdmin(ImportExportModelAdmin):
     list_display    = ('title', 'start_date', 'end_date', 'is_published')
     list_filter     = ('is_published', 'start_date')
     search_fields   = ('title', 'description')
@@ -181,7 +182,7 @@ class TopicAdmin(admin.ModelAdmin):
 
 
 @admin.register(Conference)
-class ConferenceAdmin(admin.ModelAdmin):
+class ConferenceAdmin(ImportExportModelAdmin):
     list_display    = ('name', 'date', 'location', 'is_published')
     list_filter     = ('is_published', 'date', 'location')
     search_fields   = ('name', 'location', 'description')
@@ -202,7 +203,7 @@ class ConferenceAdmin(admin.ModelAdmin):
 
 
 @admin.register(ResearchAnalysis)
-class ResearchAnalysisAdmin(admin.ModelAdmin):
+class ResearchAnalysisAdmin(ImportExportModelAdmin):
     list_display    = ('title', 'category', 'order', 'is_published')
     list_filter     = ('category', 'is_published', 'created_at')
     search_fields   = ('title', 'description')
@@ -211,7 +212,7 @@ class ResearchAnalysisAdmin(admin.ModelAdmin):
 
 
 @admin.register(Publication)
-class PublicationAdmin(admin.ModelAdmin):
+class PublicationAdmin(ImportExportModelAdmin):
     list_display    = ('title', 'publication_type', 'year', 'supervisor', 'is_published')
     list_filter     = ('publication_type', 'year', 'is_published', 'created_at')
     search_fields   = ('title', 'authors', 'venue', 'description')
@@ -225,7 +226,7 @@ class ActivityImageInline(admin.TabularInline):
 
 
 @admin.register(Activity)
-class ActivityAdmin(admin.ModelAdmin):
+class ActivityAdmin(ImportExportModelAdmin):
     list_display    = ('title', 'category', 'start_date', 'end_date', 'location', 'is_published')
     list_filter     = ('category', 'is_published', 'start_date')
     search_fields   = ('title', 'description', 'tags')
