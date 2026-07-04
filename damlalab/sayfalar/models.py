@@ -30,9 +30,37 @@ class Announcement(models.Model):
     )
     link         = models.URLField(blank=True, null=True)
     is_published = models.BooleanField(default=True)
+    nonstop      = models.BooleanField(
+                       default=False,
+                       help_text="If True, the announcement will never expire."
+                   )
+    expires_at   = models.DateTimeField(
+                       null=True,
+                       blank=True,
+                       help_text="Date and time when the announcement expires."
+                   )
+    slug         = models.SlugField(max_length=220, unique=True, blank=True)
+    description  = models.TextField(
+                       blank=True,
+                       help_text="Detailed description/content for the announcement detail page."
+                   )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
+
+
+class AnnouncementLink(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='external_links')
+    label        = models.CharField(max_length=100, help_text="Label for the link, e.g. 'Register Here'")
+    url          = models.URLField(help_text="URL of the link")
+
+    def __str__(self):
+        return f"{self.label}: {self.url}"
 
 
 class Thesis(models.Model):
@@ -125,6 +153,13 @@ class ThesisParticipation(models.Model):
         return f"{self.person.name} as {role_display} in {self.thesis.title}"
 
 class Project(models.Model):
+    LEVEL_PHD = 'PHD'
+    LEVEL_UNDERGRAD = 'UG'
+    LEVEL_CHOICES = [
+        (LEVEL_PHD, 'PhD Level'),
+        (LEVEL_UNDERGRAD, 'Undergrad Level'),
+    ]
+
     title        = models.CharField(max_length=200)
     slug         = models.SlugField(max_length=220, unique=True, blank=True)
     start_date   = models.DateField()
@@ -136,14 +171,20 @@ class Project(models.Model):
         blank=True
     )
     link         = models.URLField(blank=True, null=True)
+    project_level = models.CharField(
+        max_length=10,
+        choices=LEVEL_CHOICES,
+        default=LEVEL_PHD,
+        verbose_name="Project Level"
+    )
+    institution  = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Institution/Funding Tag",
+        help_text="e.g. TÜBİTAK, BAP, CERN"
+    )
     is_published = models.BooleanField(default=True)
 
-    participants = models.ManyToManyField(
-        Person,
-        through='ProjectParticipation',
-        related_name='projects'
-    )
-    
     students    = models.ManyToManyField(
         'Student',
         blank=True,
@@ -178,21 +219,6 @@ class Project(models.Model):
         return self.title
 
 
-class ProjectParticipation(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    person  = models.ForeignKey(Person,  on_delete=models.CASCADE)
-    role    = models.CharField(
-        max_length=30,
-        choices=Person.ROLE_CHOICES
-    )
-
-    class Meta:
-        unique_together = ('project', 'person', 'role')
-
-    def __str__(self):
-        role_display = dict(Person.ROLE_CHOICES).get(self.role, self.role)
-        return f"{self.person.name} as {role_display} in {self.project.title}"
-    
 class Position(models.Model):
     TYPE_UNDERGRADUATE = 'UG'
     TYPE_GRADUATE      = 'GR'
@@ -205,6 +231,12 @@ class Position(models.Model):
 
     title           = models.CharField(max_length=200)
     slug            = models.SlugField(max_length=220, unique=True, blank=True)
+    image           = models.ImageField(
+                          upload_to='positions/',
+                          null=True,
+                          blank=True,
+                          help_text="Optional photo/image for the position"
+                      )
     position_type   = models.CharField(
                           max_length=2,
                           choices=TYPE_CHOICES,
@@ -282,6 +314,8 @@ class Student(models.Model):
     first_name  = models.CharField(max_length=100)
     last_name   = models.CharField(max_length=100)
     email       = models.EmailField(blank=True)
+    department  = models.CharField(max_length=200, blank=True, null=True, verbose_name="Department")
+    grade       = models.CharField(max_length=50, blank=True, null=True, verbose_name="Grade/Year")
     student_type = models.CharField(
         max_length=2,
         choices=TYPE_CHOICES,
@@ -518,3 +552,75 @@ class Publication(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.year})"
+
+
+class Activity(models.Model):
+    CATEGORY_WORKSHOP = 'workshop'
+    CATEGORY_SEMINAR  = 'seminar'
+    CATEGORY_SOCIAL   = 'social'
+    CATEGORY_OUTREACH = 'outreach'
+    CATEGORY_MEETING  = 'meeting'
+    CATEGORY_CHOICES = [
+        (CATEGORY_WORKSHOP, 'Workshop'),
+        (CATEGORY_SEMINAR,  'Seminar'),
+        (CATEGORY_SOCIAL,   'Social Event'),
+        (CATEGORY_OUTREACH, 'Outreach/News'),
+        (CATEGORY_MEETING,  'Lab Meeting'),
+    ]
+
+    title        = models.CharField(max_length=200)
+    slug         = models.SlugField(max_length=220, unique=True, blank=True)
+    image        = models.ImageField(upload_to='activities/', null=True, blank=True)
+    pre_description = models.TextField(
+                       blank=True,
+                       help_text="Brief summary/preview for the card list"
+                   )
+    description  = models.TextField()
+    tags         = models.CharField(
+                       max_length=200,
+                       blank=True,
+                       help_text="Comma-separated tags (e.g. deeplearning, physics, presentation)"
+                   )
+    category     = models.CharField(
+                       max_length=20,
+                       choices=CATEGORY_CHOICES,
+                       default=CATEGORY_OUTREACH
+                   )
+    location     = models.CharField(max_length=200, blank=True)
+    start_date   = models.DateField()
+    end_date     = models.DateField(null=True, blank=True)
+    link         = models.URLField(blank=True, null=True, help_text="Optional external link")
+    is_published = models.BooleanField(default=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
+
+    # Participants
+    students                = models.ManyToManyField(Student, blank=True, related_name='activities')
+    supervisors             = models.ManyToManyField(Professor, blank=True, related_name='supervised_activities')
+
+    class Meta:
+        ordering = ['-start_date', 'title']
+        verbose_name_plural = 'Activities'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title)[:200]
+            slug = base
+            cnt = 1
+            while Activity.objects.filter(slug=slug).exists():
+                slug = f"{base}-{cnt}"
+                cnt += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class ActivityImage(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='images')
+    image    = models.ImageField(upload_to='activities/gallery/')
+    caption  = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.activity.title}"

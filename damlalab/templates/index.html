@@ -7,70 +7,66 @@
   <!-- Welcome Hero (added per request) -->
   <section class="w-full flex items-center py-12 md:py-16 bg-gradient-to-r from-white via-teal-100 to-teal-500">
     <div class="max-w-6xl mx-auto px-4 text-center">
-      <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4">Welcome to DAMLA Lab</h1>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-gray-900 mb-4">Welcome to DAMLA Lab!</h1>
       <p class="text-lg md:text-2xl text-gray-800 max-w-3xl mx-auto">Pioneering research in data analysis and machine learning applications.</p>
     </div>
   </section>
 
-  <!-- Yarı Ekran Duyuru Hero Slider (h-[50vh] yapıldı) -->
-  <section class="relative w-full h-[50vh] overflow-hidden bg-gray-900">
-    <div id="announcement-slider" class="relative w-full h-full">
-      {% for ann in announcements %}
-        <div class="announcement-card absolute inset-0 transition-opacity duration-700 ease-in-out {% if forloop.first %}opacity-100 pointer-events-auto{% else %}opacity-0 pointer-events-none{% endif %}">
-          <!-- Arka Plan Görseli -->
-          <div class="absolute inset-0">
-            {% if ann.image %}
-              <img src="{{ ann.image.url }}" alt="{{ ann.title }}" class="w-full h-full object-cover">
-            {% else %}
-              <div class="w-full h-full bg-gradient-to-r from-blue-900 to-gray-900"></div>
-            {% endif %}
-            <!-- Karartma Katmanı -->
-            <div class="absolute inset-0 bg-black bg-opacity-45"></div>
-          </div>
+  <!-- Centered Announcements Hero Slider Wrapper Section -->
+  <section class="bg-white py-6">
+    <div class="relative max-w-6xl mx-auto h-[50vh] overflow-hidden bg-gray-900 rounded-xl shadow-lg border border-gray-800">
+      <div id="announcement-slider" class="relative w-full h-full">
+        {% for ann in announcements %}
+          <div class="announcement-card absolute inset-0 transition-opacity duration-700 ease-in-out {% if forloop.first %}opacity-100 pointer-events-auto{% else %}opacity-0 pointer-events-none{% endif %}">
+            <!-- Arka Plan Görseli -->
+            <div class="absolute inset-0">
+              {% if ann.image %}
+                <img src="{{ ann.image.url }}" alt="{{ ann.title }}" class="w-full h-full object-cover">
+              {% else %}
+                <div class="w-full h-full bg-gradient-to-r from-blue-900 to-gray-900"></div>
+              {% endif %}
+              <!-- Karartma Katmanı -->
+              <div class="absolute inset-0 bg-black bg-opacity-45"></div>
+            </div>
 
-          <!-- İçerik Alanı: Sağ Tarafa Hizalı ve Boyutları Küçültülmüş -->
-          <div class="absolute inset-0 flex items-center pr-16">
-            <div class="max-w-2xl text-white ml-auto mr-12 p-4">
-              <h2 class="text-3xl md:text-4xl font-bold mb-3 leading-tight">
-                {% if ann.link %}
-                  <a href="{{ ann.link }}" target="_blank" class="hover:text-blue-400 transition">
+            <!-- İçerik Alanı: Sağ Tarafa Hizalı ve Boyutları Küçültülmüş -->
+            <div class="absolute inset-0 flex items-center pr-16">
+              <div class="max-w-2xl text-white ml-auto mr-12 p-4">
+                <h2 class="text-3xl md:text-4xl font-bold mb-3 leading-tight">
+                  <a href="{% url 'announcement_detail' ann.slug %}" class="hover:text-teal-400 transition">
                     {{ ann.title }}
                   </a>
-                {% else %}
-                  {{ ann.title }}
-                {% endif %}
-              </h2>
-              <p class="text-base md:text-lg text-gray-200 mb-4 leading-relaxed">
-                {{ ann.short_info|truncatewords:25 }}
-              </p>
-              {% if ann.link %}
-                <a href="{{ ann.link }}" target="_blank"
-                  class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition font-semibold text-sm">
+                </h2>
+                <p class="text-base md:text-lg text-gray-200 mb-4 leading-relaxed">
+                  {{ ann.short_info|truncatewords:25 }}
+                </p>
+                <a href="{% url 'announcement_detail' ann.slug %}"
+                  class="inline-block bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700 transition font-semibold text-sm">
                   Read More
                 </a>
-              {% endif %}
+              </div>
             </div>
           </div>
-        </div>
-      {% empty %}
-        <div class="absolute inset-0 flex items-center justify-center bg-gray-900">
-          <p class="text-center text-gray-400 text-2xl">No announcements at this time.</p>
-        </div>
-      {% endfor %}
-    </div>
-
-    <!-- Navigasyon Butonları (Yarı boyuta göre bottom-6 olarak yukarı çekildi) -->
-    {% if announcements|length > 1 %}
-      <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-6 z-20">
-        <button id="prev-btn" class="bg-white bg-opacity-30 hover:bg-opacity-60 text-white p-3 rounded-full transition-all">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-        </button>
-        <span id="slide-counter" class="text-white text-lg font-semibold min-w-16 text-center">1 / {{ announcements|length }}</span>
-        <button id="next-btn" class="bg-white bg-opacity-30 hover:bg-opacity-60 text-white p-3 rounded-full transition-all">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-        </button>
+        {% empty %}
+          <div class="absolute inset-0 flex items-center justify-center bg-gray-900">
+            <p class="text-center text-gray-400 text-2xl">No announcements at this time.</p>
+          </div>
+        {% endfor %}
       </div>
-    {% endif %}
+
+      <!-- Navigasyon Butonları (Yarı boyuta göre bottom-6 olarak yukarı çekildi) -->
+      {% if announcements|length > 1 %}
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-6 z-20">
+          <button id="prev-btn" class="bg-white bg-opacity-30 hover:bg-opacity-60 text-white p-3 rounded-full transition-all">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span id="slide-counter" class="text-white text-lg font-semibold min-w-16 text-center">1 / {{ announcements|length }}</span>
+          <button id="next-btn" class="bg-white bg-opacity-30 hover:bg-opacity-60 text-white p-3 rounded-full transition-all">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      {% endif %}
+    </div>
   </section>
 
   <!-- Biz Kimiz -->
@@ -97,27 +93,104 @@
       </div>
     </div>
   </section>
+  <!-- Recent Activities Slider Section -->
+  <section class="py-12 bg-white border-t border-gray-150">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Recent Activities</h2>
+      
+      {% if recent_activities %}
+      <div class="relative overflow-hidden bg-gray-50 rounded-xl shadow-lg border border-gray-100 h-[60vh] md:h-[45vh]">
+        <div id="activity-slider" class="relative w-full h-full">
+          {% for activity in recent_activities %}
+          <div class="activity-slide absolute inset-0 transition-opacity duration-700 ease-in-out {% if forloop.first %}opacity-100 pointer-events-auto{% else %}opacity-0 pointer-events-none{% endif %} flex flex-col md:flex-row">
+            
+            <!-- Left Side: Image (50% width on md) -->
+            <div class="w-full h-48 md:h-full md:w-1/2 bg-gray-100 overflow-hidden relative flex-shrink-0">
+              {% if activity.image %}
+                <img src="{{ activity.image.url }}" alt="{{ activity.title }}" class="w-full h-full object-cover">
+              {% else %}
+                <div class="w-full h-full bg-gradient-to-br from-teal-500/20 via-teal-700/20 to-teal-900/20 flex items-center justify-center">
+                  <svg class="w-16 h-16 text-teal-600/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 4a2 2 0 00-2-2m-2 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+              {% endif %}
+            </div>
 
-  <!-- Research Topics Grid -->
-  <section class="py-12 bg-gradient-to-r from-blue-50 to-white">
-    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {% for topic in topics %}
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl transition">
-          {% if topic.image %}
-            <img src="{{ topic.image.url }}" alt="{{ topic.topic }}" class="w-full h-48 object-cover">
-          {% endif %}
-          <div class="p-6">
-            <h4 class="text-xl font-semibold mb-2">{{ topic.topic }}</h4>
-            <p class="text-gray-600 mb-4">{{ topic.description }}</p>
-            <a href="{% url 'research' %}"
-               class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Learn More
-            </a>
+            <!-- Right Side: Content (50% width on md) -->
+            <div class="w-full flex-grow md:w-1/2 p-6 md:p-10 flex flex-col justify-between bg-white">
+              <div>
+                <!-- Category Badge & Date -->
+                <div class="flex items-center justify-between mb-4">
+                  {% if activity.category == 'workshop' %}
+                    <span class="bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Workshop</span>
+                  {% elif activity.category == 'seminar' %}
+                    <span class="bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Seminar</span>
+                  {% elif activity.category == 'social' %}
+                    <span class="bg-rose-100 text-rose-800 border border-rose-200 text-xs font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Social Event</span>
+                  {% elif activity.category == 'meeting' %}
+                    <span class="bg-sky-100 text-sky-800 border border-sky-200 text-xs font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Lab Meeting</span>
+                  {% else %}
+                    <span class="bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Outreach/News</span>
+                  {% endif %}
+                  
+                  <span class="text-xs text-gray-500 flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    {{ activity.start_date|date:"d M Y" }}
+                  </span>
+                </div>
+
+                <!-- Title -->
+                <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-3 line-clamp-2">
+                  <a href="{% url 'activity_detail' activity.slug %}" class="hover:text-teal-600 transition-colors">
+                    {{ activity.title }}
+                  </a>
+                </h3>
+
+                <!-- Short Preview Text -->
+                <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                  {{ activity.pre_description|default:activity.description }}
+                </p>
+
+                <!-- Tags -->
+                {% if activity.tags_list %}
+                <div class="flex flex-wrap gap-1.5 mb-4">
+                  {% for tag in activity.tags_list|slice:":3" %}
+                  <span class="text-xs bg-gray-100 text-gray-500 border border-gray-200 px-2 py-0.5 rounded-full">#{{ tag }}</span>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Button & Action -->
+              <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                <a href="{% url 'activity_detail' activity.slug %}" class="inline-flex items-center text-teal-600 hover:text-teal-800 font-bold text-sm transition-colors">
+                  View Details
+                  <svg class="ml-1.5 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+            
           </div>
+          {% endfor %}
         </div>
-      {% empty %}
-        <p class="col-span-full text-center text-gray-600">No research topics available.</p>
-      {% endfor %}
+
+        <!-- Slider Controls -->
+        {% if recent_activities|length > 1 %}
+        <div class="absolute bottom-6 right-6 flex items-center gap-4 z-20">
+          <button id="act-prev-btn" class="bg-gray-800/80 hover:bg-gray-900 text-white p-2 rounded-full transition-all shadow-md">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span id="act-slide-counter" class="text-gray-700 text-sm font-semibold min-w-12 text-center bg-white/90 px-3 py-1 rounded-full shadow border border-gray-200">1 / {{ recent_activities|length }}</span>
+          <button id="act-next-btn" class="bg-gray-800/80 hover:bg-gray-900 text-white p-2 rounded-full transition-all shadow-md">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="text-center py-12 bg-gray-50 rounded-xl border border-gray-200">
+        <p class="text-gray-500 text-lg">No activities recorded yet.</p>
+      </div>
+      {% endif %}
     </div>
   </section>
 {% endblock %}
@@ -125,54 +198,103 @@
 {% block extra_scripts %}
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Announcement Slider Logic
     const cards = Array.from(document.querySelectorAll('#announcement-slider .announcement-card'));
     let current = 0;
     const total = cards.length;
-    if (total < 1) return;
+    if (total > 0) {
+      function showSlide(idx) {
+        cards.forEach((c, i) => {
+          c.classList.toggle('opacity-100', i === idx);
+          c.classList.toggle('opacity-0', i !== idx);
+          c.classList.toggle('pointer-events-auto', i === idx);
+          c.classList.toggle('pointer-events-none', i !== idx);
+        });
+        
+        const counter = document.getElementById('slide-counter');
+        if (counter) {
+          counter.textContent = `${idx + 1} / ${total}`;
+        }
+      }
 
-    function showSlide(idx) {
-      cards.forEach((c, i) => {
-        c.classList.toggle('opacity-100', i === idx);
-        c.classList.toggle('opacity-0', i !== idx);
-        c.classList.toggle('pointer-events-auto', i === idx);
-        c.classList.toggle('pointer-events-none', i !== idx);
-      });
+      let interval = setInterval(() => {
+        current = (current + 1) % total;
+        showSlide(current);
+      }, 6000);
+
+      const prev = document.getElementById('prev-btn');
+      const next = document.getElementById('next-btn');
       
-      const counter = document.getElementById('slide-counter');
-      if (counter) {
-        // JavaScript template literal hatası buralarda düzeltildi (`${}` formatına getirildi)
-        counter.textContent = `${idx + 1} / ${total}`;
+      if (prev && next) {
+        prev.addEventListener('click', () => {
+          clearInterval(interval);
+          current = (current - 1 + total) % total;
+          showSlide(current);
+          interval = setInterval(() => {
+            current = (current + 1) % total;
+            showSlide(current);
+          }, 6000);
+        });
+        
+        next.addEventListener('click', () => {  
+          clearInterval(interval);
+          current = (current + 1) % total;
+          showSlide(current);
+          interval = setInterval(() => {
+            current = (current + 1) % total;
+            showSlide(current);
+          }, 6000);
+        });
       }
     }
 
-    let interval = setInterval(() => {
-      current = (current + 1) % total;
-      showSlide(current);
-    }, 6000);
-
-    const prev = document.getElementById('prev-btn');
-    const next = document.getElementById('next-btn');
-    
-    if (prev && next) {
-      prev.addEventListener('click', () => {
-        clearInterval(interval);
-        current = (current - 1 + total) % total;
-        showSlide(current);
-        interval = setInterval(() => {
-          current = (current + 1) % total;
-          showSlide(current);
-        }, 6000);
-      });
+    // Recent Activities Slider Logic
+    const actSlides = Array.from(document.querySelectorAll('#activity-slider .activity-slide'));
+    let actCurrent = 0;
+    const actTotal = actSlides.length;
+    if (actTotal > 0) {
+      function showActSlide(idx) {
+        actSlides.forEach((s, i) => {
+          s.classList.toggle('opacity-100', i === idx);
+          s.classList.toggle('opacity-0', i !== idx);
+          s.classList.toggle('pointer-events-auto', i === idx);
+          s.classList.toggle('pointer-events-none', i !== idx);
+        });
+        const counter = document.getElementById('act-slide-counter');
+        if (counter) {
+          counter.textContent = `${idx + 1} / ${actTotal}`;
+        }
+      }
       
-      next.addEventListener('click', () => {  
-        clearInterval(interval);
-        current = (current + 1) % total;
-        showSlide(current);
-        interval = setInterval(() => {
-          current = (current + 1) % total;
-          showSlide(current);
-        }, 6000);
-      });
+      let actInterval = setInterval(() => {
+        actCurrent = (actCurrent + 1) % actTotal;
+        showActSlide(actCurrent);
+      }, 7000);
+
+      const actPrev = document.getElementById('act-prev-btn');
+      const actNext = document.getElementById('act-next-btn');
+
+      if (actPrev && actNext) {
+        actPrev.addEventListener('click', () => {
+          clearInterval(actInterval);
+          actCurrent = (actCurrent - 1 + actTotal) % actTotal;
+          showActSlide(actCurrent);
+          actInterval = setInterval(() => {
+            actCurrent = (actCurrent + 1) % actTotal;
+            showActSlide(actCurrent);
+          }, 7000);
+        });
+
+        actNext.addEventListener('click', () => {
+          clearInterval(actInterval);
+          actCurrent = (actCurrent + 1) % actTotal;
+          showActSlide(actCurrent);
+          actInterval = setInterval(() => {
+            actCurrent = (actCurrent + 1) % actTotal;
+            showActSlide(actCurrent);
+          }, 7000);
+        });
+      }
     }
   });
 </script>

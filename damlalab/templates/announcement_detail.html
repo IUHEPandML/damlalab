@@ -1,0 +1,144 @@
+{% extends 'partials/_base.html' %}
+{% load static %}
+
+{% block title %}{{ announcement.title }} – DAMLA Lab{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<header class="bg-gradient-to-r from-white to-teal-600 text-black py-16 text-center">
+  <div class="max-w-4xl mx-auto px-4">
+    <!-- Date -->
+    <div class="flex items-center justify-center text-sm text-gray-700 mb-4 gap-1">
+      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      <span>{{ announcement.date|date:"d F Y" }}</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ announcement.title }}</h1>
+  </div>
+</header>
+
+<!-- Detail Section -->
+<section class="py-12 bg-white">
+  <div class="max-w-4xl mx-auto px-4 space-y-12">
+    
+    <!-- Cover Image -->
+    {% if announcement.image %}
+    <div class="cursor-zoom-in" onclick="openLightbox('{{ announcement.image.url }}', '{{ announcement.title }}')">
+      <img src="{{ announcement.image.url }}" alt="{{ announcement.title }}" class="w-full h-[400px] object-cover rounded-xl shadow-lg">
+    </div>
+    {% endif %}
+
+    <!-- Detailed Content -->
+    <div class="prose max-w-none">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">Announcement Details</h2>
+      <p class="text-gray-700 text-lg leading-relaxed whitespace-pre-line">{{ announcement.description|default:announcement.short_info }}</p>
+    </div>
+
+    <!-- External Links Section -->
+    {% if announcement.external_links.exists or announcement.link %}
+    <div class="bg-gray-50 border border-gray-100 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-800 mb-4">External Links & Resources</h3>
+      <div class="flex flex-wrap gap-4">
+        <!-- Main Link field -->
+        {% if announcement.link %}
+        <a href="{{ announcement.link }}" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center bg-teal-600 text-white px-5 py-3 rounded-lg shadow hover:bg-teal-700 transition font-semibold text-sm">
+          Main Announcement Link
+          <svg class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-4-4l8-8m0 0H8m8 0v8"/></svg>
+        </a>
+        {% endif %}
+
+        <!-- Extra Inline Links -->
+        {% for ext_link in announcement.external_links.all %}
+        <a href="{{ ext_link.url }}" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center bg-gray-800 text-white px-5 py-3 rounded-lg shadow hover:bg-gray-900 transition font-semibold text-sm">
+          {{ ext_link.label }}
+          <svg class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-4-4l8-8m0 0H8m8 0v8"/></svg>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Action Links -->
+    <div class="flex pt-6">
+      <a href="{% url 'announcements' %}"
+         class="ml-auto bg-gray-850 text-gray-800 border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-100 transition font-medium">
+        Back to Announcements
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Back to Research -->
+<section class="py-8 bg-gray-50 border-t border-gray-200">
+  <div class="max-w-4xl mx-auto px-4 text-center">
+    <a href="{% url 'research_analysis' %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+      <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      Back to Research Analysis
+    </a>
+  </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div id="lightbox-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+  <!-- Close Button -->
+  <button id="lightbox-close" class="absolute top-4 right-4 text-white hover:text-teal-400 p-2 focus:outline-none transition-colors duration-200" aria-label="Close image">
+    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+  </button>
+  
+  <!-- Image Container -->
+  <div class="max-w-4xl max-h-[85vh] flex items-center justify-center relative">
+    <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] rounded-lg object-contain shadow-2xl">
+  </div>
+  
+  <!-- Caption Container -->
+  <div class="mt-4 text-center text-white max-w-xl">
+    <p id="lightbox-caption" class="text-sm font-semibold"></p>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('lightbox-modal');
+  const modalImg = document.getElementById('lightbox-img');
+  const modalCaption = document.getElementById('lightbox-caption');
+  
+  window.openLightbox = function(src, caption) {
+    modalImg.src = src;
+    modalImg.alt = caption || 'Gallery Image';
+    modalCaption.textContent = caption || '';
+    modal.classList.remove('hidden');
+    // Force reflow
+    modal.offsetHeight;
+    modal.classList.add('flex');
+    modal.classList.remove('opacity-0');
+    modal.classList.add('opacity-100');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  window.closeLightbox = function() {
+    modal.classList.remove('opacity-100');
+    modal.classList.add('opacity-0');
+    setTimeout(() => {
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }, 300);
+    document.body.style.overflow = '';
+  }
+  
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal || e.target.id === 'lightbox-modal') {
+      closeLightbox();
+    }
+  });
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeLightbox();
+    }
+  });
+</script>
+{% endblock %}

@@ -9,12 +9,14 @@
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
   <!-- NAVBAR -->
-  <nav class="bg-gray-800 fixed top-0 left-0 right-0 z-50">
+  <nav class="bg-gray-800 fixed top-0 left-0 right-0 z-50"> 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
       <a href="{% url 'home' %}" class="flex-shrink-0">
         <img class="h-12 w-auto" src="{% static 'images/damla-logo.svg' %}" alt="DAMLA Lab">
       </a>
       <div class="ml-auto hidden md:flex space-x-4 items-center">
+        <a href="{% url 'announcements' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Announcements</a>
+        <div class="h-6 w-[1.5px] bg-gray-600 self-center"></div>
         <a href="{% url 'home' %}" class="text-white px-3 py-2 rounded hover:bg-gray-700">Home</a>
         <a href="{% url 'research_groups' %}" class="text-white px-3 py-2 rounded hover:bg-gray-700">Research Groups</a>
         <div class="relative group">
@@ -48,6 +50,7 @@
             </div>
           </div>
         </div>
+        <a href="{% url 'activities' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Activities</a>
         <a href="{% url 'positions' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Open Positions</a>
         <a href="{% url 'contact' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Contacts</a>
         
@@ -67,9 +70,7 @@
               <circle cx="4" cy="4" r="2"></circle>
             </svg>
           </a>
-          <a href="https://github.com/IUHEPandML" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-200 hover:scale-110 transform" title="GitHub">
-            <img src="{% static 'images/social/github.svg' %}" alt="GitHub" class="w-5 h-5">
-          </a>
+
         </div>
       </div>
       <!-- mobile toggle -->
@@ -82,6 +83,7 @@
     </div>
     <!-- mobile menu -->
     <div id="mobile-menu" class="hidden bg-gray-800 md:hidden">
+      <a href="{% url 'announcements' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Announcements</a>
       <a href="{% url 'home' %}" class="block px-4 py-2 text-white">Home</a>
       <a href="{% url 'research_groups' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Research Groups</a>
       <a href="{% url 'theses' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Theses</a>
@@ -90,7 +92,8 @@
       <a href="{% url 'research_analysis' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Research Analysis</a>
       <a href="{% url 'conferences' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Conferences</a>
       <a href="{% url 'publications' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Publications</a>
-      <a href="" class="block px-4 py-2 text-gray-300 hover:text-white">Open Positions</a>
+      <a href="{% url 'activities' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Activities</a>
+      <a href="{% url 'positions' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Open Positions</a>
       <a href="{% url 'contact' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Contacts</a>
     </div>
   </nav>
@@ -123,6 +126,7 @@
             <li><a href="{% url 'topics' %}" class="text-gray-300 hover:text-white">Topics</a></li>
             <li><a href="{% url 'conferences' %}" class="text-gray-300 hover:text-white">Conferences</a></li>
             <li><a href="{% url 'publications' %}" class="text-gray-300 hover:text-white">Publications</a></li>
+            <li><a href="{% url 'activities' %}" class="text-gray-300 hover:text-white">Activities</a></li>
           </ul>
         </div>
 
@@ -139,7 +143,7 @@
       </div>
 
       <div class="mt-6 border-t border-gray-700 pt-4 text-center text-sm text-gray-400">
-        &copy; 2025 DAMLA Lab. All rights reserved.
+        &copy; {% now "Y" %} DAMLA Lab. All rights reserved.
       </div>
     </div>
   </footer>

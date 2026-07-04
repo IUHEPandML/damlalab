@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils.text import slugify
 from django.db.models import Q
+from django.utils import timezone
 from .models import (
     Announcement,
     Thesis,
@@ -11,12 +12,25 @@ from .models import (
     Conference,
     ResearchAnalysis,
     Publication,
+    Activity,
 )
 
 def home(request):
-    announcements = Announcement.objects.filter(is_published=True).order_by('-date')
+    now = timezone.now()
+    announcements = Announcement.objects.filter(
+        Q(is_published=True) &
+        (Q(nonstop=True) | Q(expires_at__isnull=True) | Q(expires_at__gte=now))
+    ).order_by('-date')
+
+    recent_activities = Activity.objects.filter(is_published=True).order_by('-start_date')[:5]
+    for activity in recent_activities:
+        activity.students_list = [f"{s.first_name} {s.last_name}" for s in activity.students.all()]
+        activity.supervisors_list = [f"{p.first_name} {p.last_name}" for p in activity.supervisors.all()]
+        activity.tags_list = [t.strip() for t in activity.tags.split(',') if t.strip()] if activity.tags else []
+
     return render(request, 'index.html', {
         'announcements': announcements,
+        'recent_activities': recent_activities,
     })
 
 def theses(request):
@@ -57,17 +71,21 @@ def thesis_detail(request, slug):
     })
 
 def projects(request):
-    research_projects = Project.objects.filter(
+    all_projects = Project.objects.filter(
         is_published=True
-    ).order_by('-start_date').prefetch_related('projectparticipation_set__person', 'students', 'supervisors', 'principal_investigators')
+    ).order_by('-start_date').prefetch_related('students', 'supervisors', 'principal_investigators')
 
-    for project in research_projects:
+    for project in all_projects:
         project.students_list = [f"{s.first_name} {s.last_name}" for s in project.students.all()]
         project.supervisors_list = [f"{p.first_name} {p.last_name}" for p in project.supervisors.all()]
         project.pis_list = [f"{p.first_name} {p.last_name}" for p in project.principal_investigators.all()]
 
+    phd_projects = [p for p in all_projects if p.project_level == Project.LEVEL_PHD]
+    undergrad_projects = [p for p in all_projects if p.project_level == Project.LEVEL_UNDERGRAD]
+
     return render(request, 'projects.html', {
-        'research_projects': research_projects,
+        'phd_projects': phd_projects,
+        'undergrad_projects': undergrad_projects,
     })
 
 def project_detail(request, slug):
@@ -220,4 +238,45 @@ def publications(request):
     
     return render(request, 'publications.html', {
         'pub_types': pub_types,
+    })
+
+
+def activities(request):
+    activities_list = Activity.objects.filter(is_published=True).order_by('-start_date').prefetch_related('students', 'supervisors')
+    
+    for activity in activities_list:
+        activity.students_list = [f"{s.first_name} {s.last_name}" for s in activity.students.all()]
+        activity.supervisors_list = [f"{p.first_name} {p.last_name}" for p in activity.supervisors.all()]
+        activity.tags_list = [t.strip() for t in activity.tags.split(',') if t.strip()] if activity.tags else []
+
+    return render(request, 'activities.html', {
+        'activities': activities_list,
+    })
+
+
+def activity_detail(request, slug):
+    activity = get_object_or_404(Activity, slug=slug, is_published=True)
+    students = [f"{s.first_name} {s.last_name}" for s in activity.students.all()]
+    supervisors = [f"{p.first_name} {p.last_name}" for p in activity.supervisors.all()]
+    tags = [t.strip() for t in activity.tags.split(',') if t.strip()] if activity.tags else []
+
+    return render(request, 'activity_detail.html', {
+        'activity': activity,
+        'students': students,
+        'supervisors': supervisors,
+        'tags': tags,
+    })
+
+
+def announcements(request):
+    announcements_list = Announcement.objects.filter(is_published=True).order_by('-date')
+    return render(request, 'announcements.html', {
+        'announcements': announcements_list,
+    })
+
+
+def announcement_detail(request, slug):
+    announcement = get_object_or_404(Announcement, slug=slug, is_published=True)
+    return render(request, 'announcement_detail.html', {
+        'announcement': announcement,
     })

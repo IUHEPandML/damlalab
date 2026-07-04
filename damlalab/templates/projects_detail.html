@@ -9,8 +9,9 @@
   <div class="max-w-4xl mx-auto px-4">
     <h1 class="text-5xl font-bold mb-4">{{ project.title }}</h1>
     <p class="text-lg">
-      {{ project.get_project_type_display }} ·
-      {{ project.start_date }} – {% if project.end_date %}{{ project.end_date }}{% else %}Present{% endif %}
+      {{ project.get_project_level_display }}
+      {% if project.institution %} · {{ project.institution }}{% endif %}
+      · {{ project.start_date }} – {% if project.end_date %}{{ project.end_date }}{% else %}Present{% endif %}
     </p>
   </div>
 </header>
