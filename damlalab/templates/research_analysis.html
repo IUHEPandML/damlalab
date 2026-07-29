@@ -38,8 +38,13 @@
               <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
             {% else %}
-            <div class="h-36 bg-gradient-to-br from-purple-450 via-purple-500 to-indigo-500 flex items-center justify-center">
-              <span class="text-white text-4xl">🔬</span>
+            <div class="h-36 bg-gradient-to-br from-[#0c2444] via-[#163968] to-[#2563eb] flex items-center justify-center relative overflow-hidden group p-4">
+              <svg class="absolute -right-6 -bottom-6 w-32 h-32 text-white/5 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+              <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-blue-200 group-hover:scale-110 transition-transform duration-300 shadow-md">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 01-1.023-.547l-1.17-1.17a2 2 0 010-2.828l1.17-1.17a2 2 0 011.023-.547l2.387-.477a6 6 0 013.86-.517l.318-.158a6 6 0 003.86-.517l2.387.477a2 2 0 011.022.547l1.17 1.17a2 2 0 010 2.828l-1.17 1.17z"/>
+                </svg>
+              </div>
             </div>
             {% endif %}
 
@@ -131,54 +136,64 @@
   <div class="max-w-6xl mx-auto px-4">
     <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Explore Related Research</h2>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
       <!-- Research Topics Card -->
-      <a href="{% url 'topics' %}" class="group bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-        <div class="text-4xl mb-3">📚</div>
-        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">Research Topics</h3>
-        <p class="text-sm text-gray-600 mt-2">Active research areas and ongoing projects</p>
-        <div class="text-blue-600 font-medium mt-4 inline-flex items-center group-hover:translate-x-1 transition-transform">
-          Explore <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <a href="{% url 'topics' %}" class="group bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center mb-3 shadow-md group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </div>
+        <h3 class="text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">Topics</h3>
+        <p class="text-xs text-gray-600 mt-1">Active research areas & focus</p>
+        <div class="text-blue-600 text-xs font-semibold mt-3 inline-flex items-center group-hover:translate-x-1 transition-transform">
+          Explore <svg class="w-3.5 h-3.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
       </a>
 
       <!-- Projects Card -->
-      <a href="{% url 'projects' %}" class="group bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-        <div class="text-4xl mb-3">⚙️</div>
-        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-green-600 transition-colors">Projects</h3>
-        <p class="text-sm text-gray-600 mt-2">Research projects and collaborative work</p>
-        <div class="text-green-600 font-medium mt-4 inline-flex items-center group-hover:translate-x-1 transition-transform">
-          Explore <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <a href="{% url 'projects' %}" class="group bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-lg bg-emerald-600 text-white flex items-center justify-center mb-3 shadow-md group-hover:scale-110 transition-transform text-xl">
+          📓
+        </div>
+        <h3 class="text-base font-semibold text-gray-800 group-hover:text-emerald-600 transition-colors">Projects</h3>
+        <p class="text-xs text-gray-600 mt-1">Research projects & lab work</p>
+        <div class="text-emerald-600 text-xs font-semibold mt-3 inline-flex items-center group-hover:translate-x-1 transition-transform">
+          Explore <svg class="w-3.5 h-3.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
       </a>
 
       <!-- Theses Card -->
-      <a href="{% url 'theses' %}" class="group bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-        <div class="text-4xl mb-3">🎓</div>
-        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-purple-600 transition-colors">Theses</h3>
-        <p class="text-sm text-gray-600 mt-2">Master and PhD theses</p>
-        <div class="text-purple-600 font-medium mt-4 inline-flex items-center group-hover:translate-x-1 transition-transform">
-          Explore <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <a href="{% url 'theses' %}" class="group bg-gradient-to-br from-purple-50 to-fuchsia-50 border border-purple-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center mb-3 shadow-md group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+        </div>
+        <h3 class="text-base font-semibold text-gray-800 group-hover:text-purple-600 transition-colors">Theses</h3>
+        <p class="text-xs text-gray-600 mt-1">MSc & PhD academic theses</p>
+        <div class="text-purple-600 text-xs font-semibold mt-3 inline-flex items-center group-hover:translate-x-1 transition-transform">
+          Explore <svg class="w-3.5 h-3.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
       </a>
 
       <!-- Conferences Card -->
-      <a href="{% url 'conferences' %}" class="group bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-        <div class="text-4xl mb-3">🎤</div>
-        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-orange-600 transition-colors">Conferences</h3>
-        <p class="text-sm text-gray-600 mt-2">Publications and conference presentations</p>
-        <div class="text-orange-600 font-medium mt-4 inline-flex items-center group-hover:translate-x-1 transition-transform">
-          Explore <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <a href="{% url 'conferences' %}" class="group bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-lg bg-amber-600 text-white flex items-center justify-center mb-3 shadow-md group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+        </div>
+        <h3 class="text-base font-semibold text-gray-800 group-hover:text-amber-600 transition-colors">Conferences</h3>
+        <p class="text-xs text-gray-600 mt-1">Talks & presentations</p>
+        <div class="text-amber-600 text-xs font-semibold mt-3 inline-flex items-center group-hover:translate-x-1 transition-transform">
+          Explore <svg class="w-3.5 h-3.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
       </a>
 
       <!-- Publications Card -->
-      <a href="{% url 'publications' %}" class="group bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-        <div class="text-4xl mb-3">📄</div>
-        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors">Publications</h3>
-        <p class="text-sm text-gray-600 mt-2">Papers, presentations, and research outputs</p>
-        <div class="text-indigo-600 font-medium mt-4 inline-flex items-center group-hover:translate-x-1 transition-transform">
-          Explore <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <a href="{% url 'publications' %}" class="group bg-gradient-to-br from-sky-50 to-blue-50 border border-sky-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-lg bg-sky-600 text-white flex items-center justify-center mb-3 shadow-md group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <h3 class="text-base font-semibold text-gray-800 group-hover:text-sky-600 transition-colors">Publications</h3>
+        <p class="text-xs text-gray-600 mt-1">Papers & research output</p>
+        <div class="text-sky-600 text-xs font-semibold mt-3 inline-flex items-center group-hover:translate-x-1 transition-transform">
+          Explore <svg class="w-3.5 h-3.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
       </a>
     </div>

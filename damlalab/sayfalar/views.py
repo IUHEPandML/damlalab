@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.text import slugify
 from django.db.models import Q
 from django.utils import timezone
+from django.http import JsonResponse
+from django.urls import reverse
 from .models import (
     Announcement,
     Thesis,
@@ -280,3 +282,108 @@ def announcement_detail(request, slug):
     return render(request, 'announcement_detail.html', {
         'announcement': announcement,
     })
+
+
+def api_search(request):
+    q = request.GET.get('q', '').strip()
+    if not q or len(q) < 2:
+        return JsonResponse({'results': []})
+
+    results = []
+
+    # 1. Theses (Title & Abstract)
+    theses_qs = Thesis.objects.filter(is_published=True).filter(
+        Q(title__icontains=q) | Q(abstract__icontains=q)
+    )[:5]
+    for item in theses_qs:
+        url = reverse('thesis_detail', kwargs={'slug': item.slug}) if item.slug else reverse('theses')
+        results.append({
+            'category': 'Theses',
+            'category_badge': '🎓 Theses',
+            'title': item.title,
+            'url': url,
+            'snippet': (item.abstract[:120] + '...') if item.abstract else ''
+        })
+
+    # 2. Projects (Title, Description & Institution)
+    projects_qs = Project.objects.filter(is_published=True).filter(
+        Q(title__icontains=q) | Q(description__icontains=q) | Q(institution__icontains=q)
+    )[:5]
+    for item in projects_qs:
+        url = reverse('project_detail', kwargs={'slug': item.slug}) if item.slug else reverse('projects')
+        results.append({
+            'category': 'Projects',
+            'category_badge': '📓 Projects',
+            'title': item.title,
+            'url': url,
+            'snippet': (item.description[:120] + '...') if item.description else ''
+        })
+
+    # 3. Topics (Title & Description)
+    topics_qs = Topic.objects.filter(is_published=True).filter(
+        Q(title__icontains=q) | Q(description__icontains=q)
+    )[:5]
+    for item in topics_qs:
+        results.append({
+            'category': 'Topics',
+            'category_badge': '📚 Topics',
+            'title': item.title,
+            'url': reverse('topics'),
+            'snippet': (item.description[:120] + '...') if item.description else ''
+        })
+
+    # 4. Conferences (Name, Description & Location)
+    conf_qs = Conference.objects.filter(is_published=True).filter(
+        Q(name__icontains=q) | Q(description__icontains=q) | Q(location__icontains=q)
+    )[:5]
+    for item in conf_qs:
+        results.append({
+            'category': 'Conferences',
+            'category_badge': '🎤 Conferences',
+            'title': item.name,
+            'url': reverse('conferences'),
+            'snippet': (item.description[:120] + '...') if item.description else (f"{item.location} ({item.date.year})" if item.location else f"{item.date.year}")
+        })
+
+    # 5. Publications (Title, Authors, Venue & Description)
+    pub_qs = Publication.objects.filter(is_published=True).filter(
+        Q(title__icontains=q) | Q(authors__icontains=q) | Q(venue__icontains=q) | Q(description__icontains=q)
+    )[:5]
+    for item in pub_qs:
+        results.append({
+            'category': 'Publications',
+            'category_badge': '📄 Publications',
+            'title': item.title,
+            'url': reverse('publications'),
+            'snippet': (item.description[:120] + '...') if item.description else f"{item.authors} ({item.year})"
+        })
+
+    # 6. Activities (Title, Pre-description, Description & Tags)
+    act_qs = Activity.objects.filter(is_published=True).filter(
+        Q(title__icontains=q) | Q(pre_description__icontains=q) | Q(description__icontains=q) | Q(tags__icontains=q)
+    )[:5]
+    for item in act_qs:
+        url = reverse('activity_detail', kwargs={'slug': item.slug}) if item.slug else reverse('activities')
+        results.append({
+            'category': 'Activities',
+            'category_badge': '🏆 Activities',
+            'title': item.title,
+            'url': url,
+            'snippet': (item.pre_description or item.description)[:120] + '...'
+        })
+
+    # 7. Announcements (Title, Short Info & Description)
+    ann_qs = Announcement.objects.filter(is_published=True).filter(
+        Q(title__icontains=q) | Q(short_info__icontains=q) | Q(description__icontains=q)
+    )[:5]
+    for item in ann_qs:
+        url = reverse('announcement_detail', kwargs={'slug': item.slug}) if item.slug else reverse('announcements')
+        results.append({
+            'category': 'Announcements',
+            'category_badge': '📢 Announcements',
+            'title': item.title,
+            'url': url,
+            'snippet': (item.short_info or item.description)[:120] + '...'
+        })
+
+    return JsonResponse({'results': results})

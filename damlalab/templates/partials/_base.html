@@ -9,62 +9,87 @@
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
   <!-- NAVBAR -->
-  <nav class="bg-gray-800 fixed top-0 left-0 right-0 z-50"> 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
-      <a href="{% url 'home' %}" class="flex-shrink-0">
-        <img class="h-12 w-auto" src="{% static 'images/damla-logo.svg' %}" alt="DAMLA Lab">
+  <nav class="bg-[#0c2444] fixed top-0 left-0 right-0 z-50 shadow-2xl border-b border-blue-900/50"> 
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-24 sm:h-28 py-3">
+      <a href="{% url 'home' %}" class="flex-shrink-0 flex items-center py-1">
+        <img class="h-16 md:h-18 lg:h-20 w-auto object-contain transition-transform duration-200 hover:scale-[1.02] transform" src="{% static 'images/damla yatay logo.png' %}" alt="DAMLA Lab">
       </a>
-      <div class="ml-auto hidden md:flex space-x-4 items-center">
-        <a href="{% url 'announcements' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Announcements</a>
-        <div class="h-6 w-[1.5px] bg-gray-600 self-center"></div>
-        <a href="{% url 'home' %}" class="text-white px-3 py-2 rounded hover:bg-gray-700">Home</a>
-        <a href="{% url 'research_groups' %}" class="text-white px-3 py-2 rounded hover:bg-gray-700">Research Groups</a>
-        <div class="relative group">
-          <a href="{% url 'research_analysis' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700 inline-flex items-center">
-            Research <svg class="ml-1 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 9l-7 7-7-7"/></svg>
+      <div class="ml-auto hidden md:flex space-x-2 lg:space-x-3.5 items-center">
+        <a href="{% url 'announcements' %}" class="text-gray-100 hover:text-white px-4 py-2.5 rounded-lg hover:bg-[#13325c] transition-all duration-200 text-sm lg:text-base font-semibold tracking-wide">Announcements</a>
+        <div class="h-8 w-[1.5px] bg-blue-900/60 self-center"></div>
+        <a href="{% url 'home' %}" class="text-white px-4 py-2.5 rounded-lg hover:bg-[#13325c] transition-all duration-200 text-sm lg:text-base font-semibold tracking-wide">Home</a>
+        
+        <!-- Research Dropdown Menu -->
+        <div class="relative group py-2 flex items-center" id="research-dropdown-wrapper">
+          <a href="{% url 'research_analysis' %}" class="text-gray-100 hover:text-white px-4 py-2.5 rounded-lg hover:bg-[#13325c] inline-flex items-center transition-all duration-200 text-sm lg:text-base font-semibold tracking-wide">
+            <span>Research</span>
+            <svg class="ml-1.5 h-4 w-4 text-gray-300 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
           </a>
-          <div class="relative inline-block group">
-            <div
-              class="absolute right-0 mt-2 w-48 bg-gray-800 rounded shadow-lg dropdown-menu transition-opacity duration-200 ease-in-out opacity-0 pointer-events-none"
+          <div id="research-dropdown-menu" class="absolute left-0 top-full mt-1 w-52 bg-[#0c2444] border border-blue-900/50 rounded-xl shadow-2xl transition-all duration-200 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto z-50 py-2 divide-y divide-blue-900/30">
+            <a href="{% url 'theses' %}" class="block px-4 py-2.5 text-sm font-semibold text-gray-200 hover:bg-[#13325c] hover:text-white transition-colors duration-150">Theses</a>
+            <a href="{% url 'projects' %}" class="block px-4 py-2.5 text-sm font-semibold text-gray-200 hover:bg-[#13325c] hover:text-white transition-colors duration-150">Projects</a>
+            <a href="{% url 'topics' %}" class="block px-4 py-2.5 text-sm font-semibold text-gray-200 hover:bg-[#13325c] hover:text-white transition-colors duration-150">Topics</a>
+            <a href="{% url 'conferences' %}" class="block px-4 py-2.5 text-sm font-semibold text-gray-200 hover:bg-[#13325c] hover:text-white transition-colors duration-150">Conferences</a>
+            <a href="{% url 'publications' %}" class="block px-4 py-2.5 text-sm font-semibold text-gray-200 hover:bg-[#13325c] hover:text-white transition-colors duration-150">Publications</a>
+          </div>
+        </div>
+
+        <a href="{% url 'research_groups' %}" class="text-gray-100 hover:text-white px-4 py-2.5 rounded-lg hover:bg-[#13325c] transition-all duration-200 text-sm lg:text-base font-semibold tracking-wide">Research Groups</a>
+        <a href="{% url 'activities' %}" class="text-gray-100 hover:text-white px-4 py-2.5 rounded-lg hover:bg-[#13325c] transition-all duration-200 text-sm lg:text-base font-semibold tracking-wide">Activities</a>
+        <a href="{% url 'positions' %}" class="text-gray-100 hover:text-white px-4 py-2.5 rounded-lg hover:bg-[#13325c] transition-all duration-200 text-sm lg:text-base font-semibold tracking-wide">Open Positions</a>
+        <a href="{% url 'contact' %}" class="text-gray-100 hover:text-white px-4 py-2.5 rounded-lg hover:bg-[#13325c] transition-all duration-200 text-sm lg:text-base font-semibold tracking-wide">Contacts</a>
+        
+        <!-- Navbar Search Input (Normal Typing Input with Inline Dropdown & Ctrl+K Modal Badge) -->
+        <div class="relative ml-2 pl-3 border-l border-blue-900/60" id="navbar-search-container">
+          <div class="relative flex items-center">
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input 
+              type="text" 
+              id="navbar-search-input" 
+              placeholder="Search..." 
+              autocomplete="off"
+              class="w-40 lg:w-56 bg-[#081a33] text-gray-200 text-xs sm:text-sm rounded-full pl-9 pr-16 py-2 border border-blue-900/70 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 shadow-inner"
+            />
+            <button 
+              type="button"
+              onclick="openSearchModal()"
+              title="Open full screen search modal (Ctrl + K)"
+              class="absolute right-1.5 flex items-center px-2 py-0.5 text-[11px] font-mono font-bold text-blue-300 bg-[#0c2444] hover:bg-[#163968] border border-blue-800/80 rounded-md transition-colors shadow-sm cursor-pointer"
             >
-              <a href="{% url 'theses' %}"
-                class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
-                Theses
-              </a>
-              <a href="{% url 'projects' %}"
-                class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
-                Projects
-              </a>
-              <a href="{% url 'topics' %}"
-                class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
-                Topics
-              </a>
-              <a href="{% url 'conferences' %}"
-                class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
-                Conferences
-              </a>
-              <a href="{% url 'publications' %}"
-                class="block px-4 py-2 text-gray-300 hover:bg-gray-700">
-                Publications
-              </a>
+              Ctrl K
+            </button>
+          </div>
+
+          <!-- Live Search Floating Results Dropdown (Navbar) -->
+          <div 
+            id="search-results-dropdown" 
+            class="hidden absolute right-0 top-full mt-3 w-80 sm:w-96 bg-[#0c2444] border border-blue-900/60 rounded-xl shadow-2xl overflow-hidden z-[100] divide-y divide-blue-900/40 text-left"
+          >
+            <div id="search-results-content" class="max-h-96 overflow-y-auto p-2 space-y-1">
+              <!-- Dynamically populated via JS -->
+            </div>
+            <div class="px-3 py-2 bg-[#081930] text-[10px] text-gray-400 flex justify-between items-center">
+              <span>Searching: Theses, Projects, Topics, Conferences, Publications, Activities, Announcements</span>
+              <span id="search-results-count" class="font-semibold text-blue-300"></span>
             </div>
           </div>
         </div>
-        <a href="{% url 'activities' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Activities</a>
-        <a href="{% url 'positions' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Open Positions</a>
-        <a href="{% url 'contact' %}" class="text-gray-300 px-3 py-2 rounded hover:bg-gray-700">Contacts</a>
-        
+
         <!-- Social Media Icons -->
-        <div class="flex space-x-3 ml-4 pl-4 border-l border-gray-700">
-          <a href="https://www.instagram.com/damla.lab/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-200 hover:scale-110 transform" title="Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+        <div class="flex space-x-3 ml-3 pl-3 border-l border-blue-900/60">
+          <a href="https://www.instagram.com/damla.lab/" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors duration-200 hover:scale-110 transform" title="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5.5 h-5.5">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
               <circle cx="17.5" cy="6.5" r="1.5"></circle>
             </svg>
           </a>
-          <a href="https://www.linkedin.com/company/damla-lab/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-200 hover:scale-110 transform" title="LinkedIn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+          <a href="https://www.linkedin.com/company/damla-lab/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors duration-200 hover:scale-110 transform" title="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5.5 h-5.5">
               <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
               <rect x="2" y="9" width="4" height="12"></rect>
               <circle cx="4" cy="4" r="2"></circle>
@@ -75,69 +100,89 @@
       </div>
       <!-- mobile toggle -->
       <div class="md:hidden ml-auto">
-        <button onclick="toggleMobileMenu()" class="p-2 text-gray-400 hover:text-white">
-          <svg id="icon-menu" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <svg id="icon-close" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        <button onclick="toggleMobileMenu()" class="p-2 text-gray-300 hover:text-white">
+          <svg id="icon-menu" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="icon-close" class="hidden h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
     </div>
     <!-- mobile menu -->
-    <div id="mobile-menu" class="hidden bg-gray-800 md:hidden">
-      <a href="{% url 'announcements' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Announcements</a>
-      <a href="{% url 'home' %}" class="block px-4 py-2 text-white">Home</a>
-      <a href="{% url 'research_groups' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Research Groups</a>
-      <a href="{% url 'theses' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Theses</a>
-      <a href="{% url 'projects' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Projects</a>
-      <a href="{% url 'topics' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Topics</a>
-      <a href="{% url 'research_analysis' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Research Analysis</a>
-      <a href="{% url 'conferences' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Conferences</a>
-      <a href="{% url 'publications' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Publications</a>
-      <a href="{% url 'activities' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Activities</a>
-      <a href="{% url 'positions' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Open Positions</a>
-      <a href="{% url 'contact' %}" class="block px-4 py-2 text-gray-300 hover:text-white">Contacts</a>
+    <div id="mobile-menu" class="hidden bg-[#0c2444] border-t border-blue-900/40 md:hidden p-4 space-y-2">
+      <!-- Mobile Search Input with inline results -->
+      <div class="relative mb-3">
+        <input 
+          type="text" 
+          id="mobile-search-input" 
+          placeholder="Search items..." 
+          autocomplete="off"
+          class="w-full bg-[#081a33] text-gray-200 text-sm rounded-lg pl-9 pr-14 py-2 border border-blue-900/60 focus:outline-none focus:ring-1 focus:ring-blue-400"
+        />
+        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <button 
+          type="button" 
+          onclick="openSearchModal()" 
+          class="absolute right-2 top-2 px-1.5 py-0.5 text-[10px] font-mono bg-blue-950 text-blue-300 rounded border border-blue-800"
+        >
+          Ctrl K
+        </button>
+        <div id="mobile-search-results" class="hidden mt-2 bg-[#081930] rounded-lg border border-blue-900/40 p-2 max-h-60 overflow-y-auto text-left space-y-1"></div>
+      </div>
+      <a href="{% url 'announcements' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Announcements</a>
+      <a href="{% url 'home' %}" class="block px-4 py-2.5 text-white font-semibold hover:bg-[#163968]">Home</a>
+      <a href="{% url 'research_groups' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Research Groups</a>
+      <a href="{% url 'theses' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Theses</a>
+      <a href="{% url 'projects' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Projects</a>
+      <a href="{% url 'topics' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Topics</a>
+      <a href="{% url 'research_analysis' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Research Analysis</a>
+      <a href="{% url 'conferences' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Conferences</a>
+      <a href="{% url 'publications' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Publications</a>
+      <a href="{% url 'activities' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Activities</a>
+      <a href="{% url 'positions' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Open Positions</a>
+      <a href="{% url 'contact' %}" class="block px-4 py-2.5 text-gray-200 font-semibold hover:bg-[#163968]">Contacts</a>
     </div>
   </nav>
 
-  <main class="pt-16 flex-grow">
+  <main class="pt-32 sm:pt-36 lg:pt-40 flex-grow">
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="bg-gray-800 text-gray-300 py-8">
+  <footer class="bg-[#0c2444] text-gray-300 py-8 border-t border-blue-900/40">
     <div class="max-w-7xl mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left max-w-4xl mx-auto">
         <!-- Information -->
         <div>
-          <h4 class="text-white font-semibold mb-3">Information</h4>
+          <h4 class="text-white font-semibold mb-3 border-b border-blue-900/50 pb-2">Information</h4>
           <ul class="space-y-2">
-            <li><a href="{% url 'home' %}" class="text-gray-300 hover:text-white">Who are we?</a></li>
-            <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white">Contact us</a></li>
-            <li><a href="{% url 'conferences' %}" class="text-gray-300 hover:text-white">Events</a></li>
-            <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white">Directions</a></li>
-            <li><a href="{% url 'research_groups' %}" class="text-gray-300 hover:text-white">Academic staff</a></li>
-          </ul>
-        </div>
-
-        <!-- Studies -->
-        <div>
-          <h4 class="text-white font-semibold mb-3">Studies</h4>
-          <ul class="space-y-2">
-            <li><a href="{% url 'theses' %}" class="text-gray-300 hover:text-white">Theses</a></li>
-            <li><a href="{% url 'projects' %}" class="text-gray-300 hover:text-white">Projects</a></li>
-            <li><a href="{% url 'topics' %}" class="text-gray-300 hover:text-white">Topics</a></li>
-            <li><a href="{% url 'conferences' %}" class="text-gray-300 hover:text-white">Conferences</a></li>
-            <li><a href="{% url 'publications' %}" class="text-gray-300 hover:text-white">Publications</a></li>
-            <li><a href="{% url 'activities' %}" class="text-gray-300 hover:text-white">Activities</a></li>
+            <li><a href="{% url 'home' %}" class="text-gray-300 hover:text-white transition-colors duration-150">Who are we?</a></li>
+            <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white transition-colors duration-150">Contact us</a></li>
+            <li><a href="{% url 'conferences' %}" class="text-gray-300 hover:text-white transition-colors duration-150">Events</a></li>
+            <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white transition-colors duration-150">Directions</a></li>
+            <li><a href="{% url 'research_groups' %}" class="text-gray-300 hover:text-white transition-colors duration-150">Academic staff</a></li>
           </ul>
         </div>
 
         <!-- Contact -->
         <div>
-          <h4 class="text-white font-semibold mb-3">Contact</h4>
-          <address class="not-italic text-gray-300 text-sm space-y-1">
-            <div>Istanbul/Fatih, Istanbul University, Science Faculty</div>
-            <div>Office: <a href="tel:+902124555700" class="hover:text-white">0212 455 57 00 / 15485</a></div>
-            <div>Lab: <a href="tel:+902124555700" class="hover:text-white">0212 455 57 00 / 15256</a></div>
-            <div>Email: <a href="mailto:damlalab.iuhep@gmail.com" class="hover:text-white">damlalab.iuhep@gmail.com</a></div>
+          <h4 class="text-white font-semibold mb-3 border-b border-blue-900/50 pb-2">Contact</h4>
+          <address class="not-italic text-gray-300 text-sm space-y-2">
+            <div class="flex items-start space-x-2">
+              <svg class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <span>Istanbul/Fatih, Istanbul University, Science Faculty</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <span>Office: <a href="tel:+902124555700" class="hover:text-white transition-colors duration-150">0212 455 57 00 / 15485</a></span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 01-1.023-.547l-1.17-1.17a2 2 0 010-2.828l1.17-1.17a2 2 0 011.023-.547l2.387-.477a6 6 0 013.86-.517l.318-.158a6 6 0 003.86-.517l2.387.477a2 2 0 011.022.547l1.17 1.17a2 2 0 010 2.828l-1.17 1.17z"/></svg>
+              <span>Lab: <a href="tel:+902124555700" class="hover:text-white transition-colors duration-150">0212 455 57 00 / 15256</a></span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <span>Email: <a href="mailto:damlalab.iuhep@gmail.com" class="hover:text-white transition-colors duration-150">damlalab.iuhep@gmail.com</a></span>
+            </div>
           </address>
         </div>
       </div>
@@ -157,23 +202,259 @@
       document.getElementById('icon-close').classList.toggle('hidden');
     }
   </script>
+
+  <!-- GLOBAL SEARCH MODAL (Ctrl + K Command Palette) -->
+  <div id="search-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-[100] flex items-start justify-center pt-16 sm:pt-20 px-4 transition-all duration-200">
+    <div id="search-modal-card" class="bg-[#0c2444] border border-blue-900/60 rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh] text-left transform transition-all duration-200">
+      
+      <!-- Modal Search Bar Header -->
+      <div class="p-4 border-b border-blue-900/50 flex items-center space-x-3 bg-[#081a33]">
+        <svg class="w-6 h-6 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input 
+          type="text" 
+          id="modal-search-input" 
+          placeholder="Search theses, projects, topics, conferences, publications, activities..." 
+          autocomplete="off"
+          class="w-full bg-transparent text-white text-base sm:text-lg placeholder-gray-400 focus:outline-none"
+        />
+        <button onclick="closeSearchModal()" class="text-gray-400 hover:text-white px-2 py-1 text-xs font-mono rounded border border-blue-900/80 bg-blue-950/60 transition-colors">
+          ESC
+        </button>
+      </div>
+
+      <!-- Modal Results Body -->
+      <div id="modal-search-results" class="p-3 overflow-y-auto space-y-2 max-h-[60vh]">
+        <div class="py-12 text-center text-gray-400 text-sm flex flex-col items-center justify-center space-y-2">
+          <svg class="w-8 h-8 text-blue-400/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <p>Type at least 2 characters to search across DAMLA Lab...</p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-4 py-2.5 bg-[#061427] border-t border-blue-900/40 text-xs text-gray-400 flex justify-between items-center">
+        <span class="flex items-center space-x-2 text-[11px]">
+          <kbd class="px-1.5 py-0.5 font-mono text-[10px] bg-blue-950 text-blue-300 border border-blue-800 rounded">ESC</kbd>
+          <span>to close</span>
+          <span class="mx-1">•</span>
+          <span>Click backdrop to close</span>
+        </span>
+        <span id="modal-search-count" class="font-semibold text-blue-300 text-[11px]"></span>
+      </div>
+    </div>
+  </div>
+
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const wrapper = document.querySelector('.group');
-    const menu    = wrapper.querySelector('.dropdown-menu');
-    let hideTimer;
+    function resetModalSearch() {
+      const input = document.getElementById('modal-search-input');
+      const resultsEl = document.getElementById('modal-search-results');
+      const countEl = document.getElementById('modal-search-count');
+      if (input) input.value = '';
+      if (resultsEl) {
+        resultsEl.innerHTML = `
+          <div class="py-12 text-center text-gray-400 text-sm flex flex-col items-center justify-center space-y-2">
+            <svg class="w-8 h-8 text-blue-400/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <p>Type at least 2 characters to search across DAMLA Lab...</p>
+          </div>`;
+      }
+      if (countEl) countEl.textContent = '';
+    }
 
-    wrapper.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimer);
-      menu.classList.add('opacity-100', 'pointer-events-auto');
-    });
+    function resetNavbarSearch() {
+      const input = document.getElementById('navbar-search-input');
+      const content = document.getElementById('search-results-content');
+      const count = document.getElementById('search-results-count');
+      const dropdown = document.getElementById('search-results-dropdown');
+      if (input) input.value = '';
+      if (content) content.innerHTML = '';
+      if (count) count.textContent = '';
+      if (dropdown) dropdown.classList.add('hidden');
+    }
 
-    wrapper.addEventListener('mouseleave', () => {
-      hideTimer = setTimeout(() => {
-        menu.classList.remove('opacity-100', 'pointer-events-auto');
-      }, 300); // 300ms gecikmeli kapatma
+    function openSearchModal() {
+      const modal = document.getElementById('search-modal');
+      if (modal) {
+        resetModalSearch();
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        const input = document.getElementById('modal-search-input');
+        if (input) {
+          setTimeout(() => {
+            input.value = '';
+            input.focus();
+          }, 50);
+        }
+      }
+    }
+
+    function closeSearchModal() {
+      const modal = document.getElementById('search-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        resetModalSearch();
+      }
+    }
+
+    window.openSearchModal = openSearchModal;
+    window.closeSearchModal = closeSearchModal;
+    window.resetNavbarSearch = resetNavbarSearch;
+
+    // Global Ctrl + K / Cmd + K keyboard shortcut
+    window.addEventListener('keydown', function (e) {
+      const isK = e.code === 'KeyK' || (e.key && e.key.toLowerCase() === 'k');
+      if ((e.ctrlKey || e.metaKey) && isK) {
+        e.preventDefault();
+        openSearchModal();
+      } else if (e.key === 'Escape') {
+        closeSearchModal();
+      }
+    }, true);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Dropdown hover menu for Research
+      const researchDropdown = document.getElementById('research-dropdown-wrapper');
+      const researchMenu = document.getElementById('research-dropdown-menu');
+      if (researchDropdown && researchMenu) {
+        let hideTimer;
+
+        researchDropdown.addEventListener('mouseenter', () => {
+          clearTimeout(hideTimer);
+          researchMenu.classList.remove('opacity-0', 'pointer-events-none');
+          researchMenu.classList.add('opacity-100', 'pointer-events-auto');
+        });
+
+        researchDropdown.addEventListener('mouseleave', () => {
+          hideTimer = setTimeout(() => {
+            researchMenu.classList.remove('opacity-100', 'pointer-events-auto');
+            researchMenu.classList.add('opacity-0', 'pointer-events-none');
+          }, 250);
+        });
+      }
+
+      // Close modal when clicking outside modal card
+      const modal = document.getElementById('search-modal');
+      const modalCard = document.getElementById('search-modal-card');
+      if (modal && modalCard) {
+        modal.addEventListener('click', (e) => {
+          if (!modalCard.contains(e.target)) {
+            closeSearchModal();
+          }
+        });
+      }
+
+      // Helper function to attach live search to any input element
+      function attachLiveSearch(inputId, resultsId, countId, dropdownId) {
+        const input = document.getElementById(inputId);
+        const resultsEl = document.getElementById(resultsId);
+        const countEl = countId ? document.getElementById(countId) : null;
+        const dropdownEl = dropdownId ? document.getElementById(dropdownId) : null;
+        let timer;
+
+        if (!input || !resultsEl) return;
+
+        function performSearch(query) {
+          const q = query.trim();
+          if (q.length < 2) {
+            if (dropdownEl) dropdownEl.classList.add('hidden');
+            if (inputId === 'modal-search-input') {
+              resultsEl.innerHTML = `
+                <div class="py-12 text-center text-gray-400 text-sm flex flex-col items-center justify-center space-y-2">
+                  <svg class="w-8 h-8 text-blue-400/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  <p>Type at least 2 characters to search across DAMLA Lab...</p>
+                </div>`;
+            } else {
+              resultsEl.innerHTML = '';
+            }
+            if (countEl) countEl.textContent = '';
+            return;
+          }
+
+          fetch(`/api/search/?q=${encodeURIComponent(q)}`)
+            .then(res => res.json())
+            .then(data => {
+              const results = data.results || [];
+              resultsEl.innerHTML = '';
+
+              if (results.length === 0) {
+                resultsEl.innerHTML = `
+                  <div class="p-4 text-center text-xs text-gray-400">
+                    No results matching "${q}"
+                  </div>`;
+                if (countEl) countEl.textContent = '0 results';
+              } else {
+                if (countEl) countEl.textContent = `${results.length} result${results.length > 1 ? 's' : ''}`;
+
+                results.forEach(item => {
+                  const card = document.createElement('a');
+                  card.href = item.url;
+                  card.className = 'block p-3 rounded-xl hover:bg-[#163968] transition-colors duration-150 group text-left border border-transparent hover:border-blue-800/40';
+                  card.innerHTML = `
+                    <div class="flex items-center justify-between mb-0.5">
+                      <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800/50">
+                        ${item.category_badge}
+                      </span>
+                      <svg class="w-4 h-4 text-gray-400 group-hover:text-white transition-colors transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </div>
+                    <div class="text-xs sm:text-sm font-bold text-white group-hover:text-blue-300 transition-colors">
+                      ${item.title}
+                    </div>
+                    ${item.snippet ? `<div class="text-[11px] text-gray-300 mt-0.5 line-clamp-2 leading-relaxed">${item.snippet}</div>` : ''}
+                  `;
+                  resultsEl.appendChild(card);
+                });
+              }
+              if (dropdownEl) dropdownEl.classList.remove('hidden');
+            })
+            .catch(err => console.error('Search error:', err));
+        }
+
+        input.addEventListener('input', (e) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => performSearch(e.target.value), 200);
+        });
+
+        input.addEventListener('focus', (e) => {
+          if (e.target.value.trim().length >= 2) {
+            performSearch(e.target.value);
+          } else {
+            if (dropdownEl) dropdownEl.classList.add('hidden');
+            if (inputId === 'modal-search-input') {
+              resultsEl.innerHTML = `
+                <div class="py-12 text-center text-gray-400 text-sm flex flex-col items-center justify-center space-y-2">
+                  <svg class="w-8 h-8 text-blue-400/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  <p>Type at least 2 characters to search across DAMLA Lab...</p>
+                </div>`;
+            } else {
+              resultsEl.innerHTML = '';
+            }
+            if (countEl) countEl.textContent = '';
+          }
+        });
+
+        resultsEl.addEventListener('click', (e) => {
+          if (e.target.closest('a')) {
+            closeSearchModal();
+            resetNavbarSearch();
+          }
+        });
+      }
+
+      attachLiveSearch('navbar-search-input', 'search-results-content', 'search-results-count', 'search-results-dropdown');
+      attachLiveSearch('mobile-search-input', 'mobile-search-results', null, 'mobile-search-results');
+      attachLiveSearch('modal-search-input', 'modal-search-results', 'modal-search-count', null);
+
+      // Close navbar dropdown when clicking outside and reset value/results
+      document.addEventListener('click', (e) => {
+        const container = document.getElementById('navbar-search-container');
+        if (container && !container.contains(e.target)) {
+          resetNavbarSearch();
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>

@@ -19,4 +19,5 @@ urlpatterns = [
     path('activities/<slug:slug>/',       views.activity_detail,           name='activity_detail'),
     path('positions/',                    views.positions,                 name='positions'),
     path('contact/',                      views.contact,                   name='contact'),
+    path('api/search/',                   views.api_search,                name='api_search'),
 ]

@@ -127,8 +127,13 @@
           <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
         </div>
         {% else %}
-        <div class="h-48 bg-gradient-to-br from-purple-400 to-indigo-400 flex items-center justify-center">
-          <span class="text-white text-5xl">🔬</span>
+        <div class="h-48 bg-gradient-to-br from-[#0c2444] via-[#163968] to-[#2563eb] flex items-center justify-center relative overflow-hidden group p-6">
+          <svg class="absolute -right-6 -bottom-6 w-36 h-36 text-white/5 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+          <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-blue-200 group-hover:scale-110 transition-transform duration-300 shadow-md">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 01-1.023-.547l-1.17-1.17a2 2 0 010-2.828l1.17-1.17a2 2 0 011.023-.547l2.387-.477a6 6 0 013.86-.517l.318-.158a6 6 0 003.86-.517l2.387.477a2 2 0 011.022.547l1.17 1.17a2 2 0 010 2.828l-1.17 1.17z"/>
+            </svg>
+          </div>
         </div>
         {% endif %}
 
